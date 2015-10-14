@@ -9,7 +9,7 @@ This guide is relevant if you want to use CloudUnit 1.0 through the command line
 
 ## Gettings started
 
-Download the zip archive here. Unzip the archive in a user directory.
+Download the zip archive [here](https://github.com/Treeptik/CloudUnit/releases/download/1.0/cloudunitcli.zip). Unzip the archive in a user directory.
 If you use Linux/Mac, run the cloudunit.sh file to start the application. If you use Windows, you have a cloudunit.bat file.
 
 ## Help
