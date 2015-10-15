@@ -37,267 +37,265 @@ import fr.treeptik.cloudunit.cli.rest.RestUtils;
 @Component
 public class ModuleUtils {
 
-	@Autowired
-	private ApplicationUtils applicationUtils;
+    @Autowired
+    private ApplicationUtils applicationUtils;
 
-	@Autowired
-	private AuthentificationUtils authentificationUtils;
+    @Autowired
+    private AuthentificationUtils authentificationUtils;
 
-	@Autowired
-	private CheckUtils checkUtils;
+    @Autowired
+    private CheckUtils checkUtils;
 
-	@Autowired
-	private UrlLoader urlLoader;
+    @Autowired
+    private UrlLoader urlLoader;
 
-	@InjectLogger
-	private Logger log;
+    @InjectLogger
+    private Logger log;
 
-	@Autowired
-	private ShellStatusCommand statusCommand;
+    @Autowired
+    private ShellStatusCommand statusCommand;
 
-	@Autowired
-	private RestUtils restUtils;
+    @Autowired
+    private RestUtils restUtils;
 
-	private String applicationName;
+    private String applicationName;
 
-	@Autowired
-	private FileUtils fileUtils;
+    @Autowired
+    private FileUtils fileUtils;
 
-	public String getListModules() {
-		if (authentificationUtils.getMap().isEmpty()) {
-			log.log(Level.SEVERE,
-					"You are not connected to CloudUnit host! Please use connect command");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
-		if (fileUtils.isInFileExplorer()) {
-			log.log(Level.SEVERE,
-					"You are currently in a container file explorer. Please exit it with close-explorer command");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
-		if (applicationUtils.getApplication() == null) {
-			log.log(Level.SEVERE,
-					"No application is currently selected by use <application name>");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
+    public String getListModules() {
+        if (authentificationUtils.getMap().isEmpty()) {
+            log.log(Level.SEVERE,
+                    "You are not connected to CloudUnit host! Please use connect command");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
+        if (fileUtils.isInFileExplorer()) {
+            log.log(Level.SEVERE,
+                    "You are currently in a container file explorer. Please exit it with close-explorer command");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
+        if (applicationUtils.getApplication() == null) {
+            log.log(Level.SEVERE,
+                    "No application is currently selected by use <application name>");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
 
-		String dockerManagerIP = applicationUtils.getApplication()
-				.getManagerIp();
-		statusCommand.setExitStatut(0);
+        String dockerManagerIP = applicationUtils.getApplication()
+                .getManagerIp();
+        statusCommand.setExitStatut(0);
 
-		MessageConverter.buildLightModuleMessage(
-				applicationUtils.getApplication(), dockerManagerIP);
-		return null;
-	}
+        MessageConverter.buildLightModuleMessage(
+                applicationUtils.getApplication(), dockerManagerIP);
+        return null;
+    }
 
-	public String addModule(final String imageName, final File script) {
-		String response = null;
-		if (authentificationUtils.getMap().isEmpty()) {
-			log.log(Level.SEVERE,
-					"You are not connected to CloudUnit host! Please use connect command");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
-		if (fileUtils.isInFileExplorer()) {
-			log.log(Level.SEVERE,
-					"You are currently in a container file explorer. Please exit it with close-explorer command");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
+    public String addModule(final String imageName, final File script) {
+        String response = null;
+        if (authentificationUtils.getMap().isEmpty()) {
+            log.log(Level.SEVERE,
+                    "You are not connected to CloudUnit host! Please use connect command");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
+        if (fileUtils.isInFileExplorer()) {
+            log.log(Level.SEVERE,
+                    "You are currently in a container file explorer. Please exit it with close-explorer command");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
 
-		if (applicationUtils.getApplication() == null) {
-			log.log(Level.SEVERE,
-					"No application is currently selected by the following command line : use <application name>");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
+        if (applicationUtils.getApplication() == null) {
+            log.log(Level.SEVERE,
+                    "No application is currently selected by the following command line : use <application name>");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
 
-		if (checkUtils.checkImageNoExist(imageName)) {
-			return null;
-		}
+        if (checkUtils.checkImageNoExist(imageName)) {
+            return null;
+        }
 
-		try {
-			Map<String, String> parameters = new HashMap<>();
-			parameters.put("imageName", imageName);
-			parameters.put("applicationName", applicationName);
-			restUtils.sendPostCommand(
-					authentificationUtils.finalHost + urlLoader.modulePrefix,
-					authentificationUtils.getMap(), parameters).get("body");
-			statusCommand.setExitStatut(0);
+        try {
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("imageName", imageName);
+            parameters.put("applicationName", applicationName);
+            restUtils.sendPostCommand(
+                    authentificationUtils.finalHost + urlLoader.modulePrefix,
+                    authentificationUtils.getMap(), parameters).get("body");
+            statusCommand.setExitStatut(0);
 
-			response = "Your module " + imageName
-					+ " is currently being added to your application "
-					+ applicationUtils.getApplication().getName();
+            response = "Your module " + imageName
+                    + " is currently being added to your application "
+                    + applicationUtils.getApplication().getName();
 
-			if (script != null) {
-				response += ", a script of initialization has been detected";
-				ExecutorService executorService = Executors
-						.newSingleThreadExecutor();
-				executorService.execute(new Runnable() {
+            if (script != null) {
+                response += ", a script of initialization has been detected";
+                ExecutorService executorService = Executors
+                        .newSingleThreadExecutor();
+                executorService.execute(new Runnable() {
 
-					@Override
-					public void run() {
-						try {
-							Thread.sleep(10000);
-						} catch (InterruptedException e) {
-						}
-						initData(imageName, script);
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(10000);
+                        } catch (InterruptedException e) {
+                        }
+                        initData(imageName, script);
 
-					}
-				});
-			}
+                    }
+                });
+            }
 
-			applicationName = applicationUtils.getApplication().getName();
-			applicationUtils.setApplication(null);
-			applicationUtils.useApplication(applicationName);
+            applicationName = applicationUtils.getApplication().getName();
+            applicationUtils.setApplication(null);
+            applicationUtils.useApplication(applicationName);
 
-		} catch (ResourceAccessException e) {
-			log.log(Level.SEVERE,
-					"The CLI can't etablished connexion with host servers. Please try later or contact an admin");
-			statusCommand.setExitStatut(1);
-			return null;
-		} catch (Exception e) {
-			statusCommand.setExitStatut(1);
-			return null;
-		}
+        } catch (ResourceAccessException e) {
+            log.log(Level.SEVERE,
+                    "The CLI can't etablished connexion with host servers. Please try later or contact an admin");
+            statusCommand.setExitStatut(1);
+            return null;
+        } catch (Exception e) {
+            statusCommand.setExitStatut(1);
+            return null;
+        }
 
-		return response;
+        return response;
 
-	}
+    }
 
-	/**
-	 * TODO check if introduction of applicationName don't cause other problems
-	 */
-	public String removeModule(String moduleName) {
-		if (applicationName != null && !applicationName.isEmpty()) {
-			applicationUtils.useApplication(applicationName);
-		}
+    /**
+     * TODO check if introduction of applicationName don't cause other problems
+     */
+    public String removeModule(String moduleName) {
+        if (applicationName != null && !applicationName.isEmpty()) {
+            applicationUtils.useApplication(applicationName);
+        }
 
-		if (authentificationUtils.getMap().isEmpty()) {
-			log.log(Level.SEVERE,
-					"You are not connected to CloudUnit host! Please use connect command");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
+        if (authentificationUtils.getMap().isEmpty()) {
+            log.log(Level.SEVERE,
+                    "You are not connected to CloudUnit host! Please use connect command");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
 
-		if (fileUtils.isInFileExplorer()) {
-			log.log(Level.SEVERE,
-					"You are currently in a container file explorer. Please exit it with close-explorer command");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
+        if (fileUtils.isInFileExplorer()) {
+            log.log(Level.SEVERE,
+                    "You are currently in a container file explorer. Please exit it with close-explorer command");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
 
-		if (applicationUtils.getApplication() == null) {
-			log.log(Level.SEVERE,
-					"No application is currently selected by the following command line : use <application name>");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
+        if (applicationUtils.getApplication() == null) {
+            log.log(Level.SEVERE,
+                    "No application is currently selected by the following command line : use <application name>");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
 
-		try {
+        try {
 
-			for (Module module : applicationUtils.getApplication().getModules()) {
+            for (Module module : applicationUtils.getApplication().getModules()) {
 
-				if (module.getName().endsWith(moduleName)) {
-					restUtils
-							.sendDeleteCommand(
-									authentificationUtils.finalHost
-											+ urlLoader.modulePrefix
-											+ applicationUtils.getApplication()
-													.getName() + "/"
-											+ module.getName(),
-									authentificationUtils.getMap()).get("body");
-				}
-			}
-			applicationName = applicationUtils.getApplication().getName();
-			applicationUtils.setApplication(null);
-			applicationUtils.useApplication(applicationName);
+                if (module.getName().endsWith(moduleName)) {
+                    restUtils
+                            .sendDeleteCommand(
+                                    authentificationUtils.finalHost
+                                            + urlLoader.modulePrefix
+                                            + applicationUtils.getApplication()
+                                            .getName() + "/"
+                                            + module.getName(),
+                                    authentificationUtils.getMap()).get("body");
+                }
+            }
+            applicationName = applicationUtils.getApplication().getName();
+            applicationUtils.setApplication(null);
+            applicationUtils.useApplication(applicationName);
 
-		} catch (ResourceAccessException e) {
-			log.log(Level.SEVERE,
-					"The CLI can't etablished connexion with host servers. Please try later or contact an admin");
-			statusCommand.setExitStatut(1);
-			return null;
-		} catch (Exception e) {
-			statusCommand.setExitStatut(1);
-			return null;
-		}
+        } catch (ResourceAccessException e) {
+            log.log(Level.SEVERE,
+                    "The CLI can't etablished connexion with host servers. Please try later or contact an admin");
+            statusCommand.setExitStatut(1);
+            return null;
+        } catch (Exception e) {
+            statusCommand.setExitStatut(1);
+            return null;
+        }
 
-		return "Your module " + moduleName
-				+ " is currently being removed from your application "
-				+ applicationUtils.getApplication().getName();
+        return "Your module " + moduleName
+                + " is currently being removed from your application "
+                + applicationUtils.getApplication().getName();
 
-	}
+    }
 
-	public String initData(String moduleName, File path) {
-		if (authentificationUtils.getMap().isEmpty()) {
-			log.log(Level.SEVERE,
-					"You are not connected to CloudUnit host! Please use connect command");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
+    public String initData(String moduleName, File path) {
+        if (authentificationUtils.getMap().isEmpty()) {
+            log.log(Level.SEVERE,
+                    "You are not connected to CloudUnit host! Please use connect command");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
 
-		if (fileUtils.isInFileExplorer()) {
-			log.log(Level.SEVERE,
-					"You are currently in a container file explorer. Please exit it with close-explorer command");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
+        if (fileUtils.isInFileExplorer()) {
+            log.log(Level.SEVERE,
+                    "You are currently in a container file explorer. Please exit it with close-explorer command");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
 
-		if (applicationUtils.getApplication() == null) {
-			log.log(Level.SEVERE,
-					"No application is currently selected by the following command line : use <application name>");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
+        if (applicationUtils.getApplication() == null) {
+            log.log(Level.SEVERE,
+                    "No application is currently selected by the following command line : use <application name>");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
 
-		try {
+        try {
 
-			for (Module module : applicationUtils.getApplication().getModules()) {
+            for (Module module : applicationUtils.getApplication().getModules()) {
 
-				if (module.getName().endsWith(moduleName)) {
+                if (module.getName().endsWith(moduleName)) {
 
-					File file = path;
-					FileInputStream fileInputStream = new FileInputStream(file);
-					fileInputStream.available();
-					fileInputStream.close();
-					FileSystemResource resource = new FileSystemResource(file);
-					Map<String, Object> params = new HashMap<>();
-					params.put("file", resource);
-					params.putAll(authentificationUtils.getMap());
+                    File file = path;
+                    FileInputStream fileInputStream = new FileInputStream(file);
+                    fileInputStream.available();
+                    fileInputStream.close();
+                    FileSystemResource resource = new FileSystemResource(file);
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("file", resource);
+                    params.putAll(authentificationUtils.getMap());
 
-					restUtils.sendPostForUpload(
-							authentificationUtils.finalHost
-									+ urlLoader.modulePrefix
-									+ applicationUtils.getApplication()
-											.getName() + "/" + module.getName()
-									+ "/initData", params).get("body");
-				}
-			}
-		}
+                    restUtils.sendPostForUpload(
+                            authentificationUtils.finalHost
+                                    + urlLoader.modulePrefix
+                                    + applicationUtils.getApplication()
+                                    .getName() + "/" + module.getName()
+                                    + "/initData", params).get("body");
+                }
+            }
+        } catch (ResourceAccessException e) {
+            log.log(Level.SEVERE,
+                    "The CLI can't etablished connexion with host servers. Please try later or contact an admin");
+            statusCommand.setExitStatut(1);
+            return null;
+        } catch (Exception e) {
+            statusCommand.setExitStatut(1);
+            return null;
+        }
 
-		catch (ResourceAccessException e) {
-			log.log(Level.SEVERE,
-					"The CLI can't etablished connexion with host servers. Please try later or contact an admin");
-			statusCommand.setExitStatut(1);
-			return null;
-		} catch (Exception e) {
-			statusCommand.setExitStatut(1);
-			return null;
-		}
+        return "Datas correctly sent";
 
-		return "Datas correctly sent";
+    }
 
-	}
+    public String getApplicationName() {
+        return applicationName;
+    }
 
-	public String getApplicationName() {
-		return applicationName;
-	}
-
-	public void setApplicationName(String applicationName) {
-		this.applicationName = applicationName;
-	}
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
 
 }

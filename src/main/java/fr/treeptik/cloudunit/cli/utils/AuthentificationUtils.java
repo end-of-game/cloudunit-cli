@@ -35,117 +35,104 @@ import fr.treeptik.cloudunit.cli.rest.RestUtils;
 @Component
 public class AuthentificationUtils {
 
-	@InjectLogger
-	private Logger log;
+    public String finalHost;
+    @InjectLogger
+    private Logger log;
+    private Map<String, Object> map = new HashMap<>();
+    @Value("${host}")
+    private String defaultHost;
+    @Value("${manager.version}")
+    private String apiVersion;
+    @Autowired
+    private UrlLoader urlLoader;
+    @Autowired
+    private CloudUnitPromptProvider clPromptProvider;
+    @Autowired
+    private ShellStatusCommand statusCommand;
+    @Autowired
+    private RestUtils restUtils;
+    @Autowired
+    private ApplicationUtils applicationUtils;
+    @Autowired
+    private FileUtils fileUtils;
+    private Integer loop = 0;
 
-	private Map<String, Object> map = new HashMap<>();
+    /**
+     * Methode de connexion
+     *
+     * @param login
+     * @param password
+     * @param selectedHost
+     * @return
+     */
+    public String connect(String login, String password, String selectedHost) {
 
-	@Value("${host}")
-	private String defaultHost;
+        if (!map.isEmpty()) {
+            statusCommand.setExitStatut(0);
+            return (ANSIConstants.ANSI_PURPLE + "You are already connected to CloudUnit servers" + ANSIConstants.ANSI_RESET);
+        }
 
-	@Value("${manager.version}")
-	private String apiVersion;
+        if (fileUtils.isInFileExplorer()) {
+            log.log(Level.SEVERE,
+                    "You are currently in a container file explorer. Please exit it with close-explorer command");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
 
-	@Autowired
-	private UrlLoader urlLoader;
+        try {
+            loop++;
 
-	@Autowired
-	private CloudUnitPromptProvider clPromptProvider;
+            if (password.equalsIgnoreCase("")) {
+                log.log(Level.INFO, "Enter your password : ");
+                password = new ConsoleReader()
+                        .readLine(new Character('*'));
+            }
+            Map<String, Object> loginInfo = new HashMap<>();
+            loginInfo.put("login", login);
+            loginInfo.put("password", password);
 
-	@Autowired
-	private ShellStatusCommand statusCommand;
+            // check the host
 
-	@Autowired
-	private RestUtils restUtils;
+            if (!selectedHost.isEmpty()) {
+                log.log(Level.INFO, "Trying to connect to " + selectedHost);
+                finalHost = selectedHost;
 
-	@Autowired
-	private ApplicationUtils applicationUtils;
+            } else {
+                log.log(Level.INFO,
+                        "Trying to connect to default CloudUnit host...");
+                finalHost = defaultHost;
+            }
 
-	@Autowired
-	private FileUtils fileUtils;
+            // trying to connect with host manager
+            String urlToCall = finalHost + urlLoader.connect;
+            restUtils.connect(urlToCall, loginInfo).get("body");
+            applicationUtils.setApplication(null);
+            resetPrompt();
+            statusCommand.setExitStatut(0);
 
-	private Integer loop = 0;
+        } catch (ResourceAccessException e) {
+            log.log(Level.SEVERE,
+                    "The CLI can't etablished connection with host servers. Please try later or contact a");
+            statusCommand.setExitStatut(1);
+            return null;
+        } catch (Exception e) {
+            if (loop >= 3) {
+                return null;
+            }
+            statusCommand.setExitStatut(1);
+            password = "";
+            return this.connect(login, password, selectedHost);
+        }
 
-	public String finalHost;
+        map.put("login", login);
+        map.put("password", password);
+        loop = 0;
 
-	/**
-	 * Methode de connexion
-	 * 
-	 * @param login
-	 * @param password
-	 * @param selectedHost
-	 * @return
-	 */
-	public String connect(String login, String password, String selectedHost) {
+        Boolean checkingAPI = this.checkAPIVersion(finalHost);
 
-		if (!map.isEmpty()) {
-			statusCommand.setExitStatut(0);
-			log.log(Level.WARNING,
-					"You are already connected to CloudUnit servers");
-			return null;
-		}
-
-		if (fileUtils.isInFileExplorer()) {
-			log.log(Level.SEVERE,
-					"You are currently in a container file explorer. Please exit it with close-explorer command");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
-
-		try {
-			loop++;
-
-			if (password.equalsIgnoreCase("")) {
-				log.log(Level.INFO, "Enter your password : ");
-				password = new ConsoleReader()
-						.readLine(new Character('*'));
-			}
-			Map<String, Object> loginInfo = new HashMap<>();
-			loginInfo.put("login", login);
-			loginInfo.put("password", password);
-
-			// check the host
-
-			if (!selectedHost.isEmpty()) {
-				log.log(Level.INFO, "Trying to connect to " + selectedHost);
-				finalHost = selectedHost;
-
-			} else {
-				log.log(Level.INFO,
-						"Trying to connect to default CloudUnit host...");
-				finalHost = defaultHost;
-			}
-
-			// trying to connect with host manager
-			String urlToCall = finalHost + urlLoader.connect;
-			restUtils.connect(urlToCall, loginInfo).get("body");
-			applicationUtils.setApplication(null);
-			resetPrompt();
-			statusCommand.setExitStatut(0);
-
-		} catch (ResourceAccessException e) {
-			log.log(Level.SEVERE,
-					"The CLI can't etablished connection with host servers. Please try later or contact a");
-			statusCommand.setExitStatut(1);
-			return null;
-		} catch (Exception e) {
-			if (loop >= 3) {
-				return null;
-			}
-			statusCommand.setExitStatut(1);
-			password = "";
-			return this.connect(login, password, selectedHost);
-		}
-
-		map.put("login", login);
-		map.put("password", password);
-		loop = 0;
-
-		Boolean checkingAPI = this.checkAPIVersion(finalHost);
-
-		// Test if connection was successful
-		/*
-		if (checkingAPI == null) {
+        // Test if connection was successful
+        /*
+        if (checkingAPI == null) {
 			restUtils.localContext = null;
 			this.map.clear();
 			return null;
@@ -158,48 +145,47 @@ public class AuthentificationUtils {
 			return null;
 		}
 		*/
-		return "Connection established";
+        return "Connection established";
 
-	}
+    }
 
-	private Boolean checkAPIVersion(String host) {
-		String response = restUtils.sendGetCommand(
-				host + urlLoader.imageFind + "/version", map).get("body");
+    private Boolean checkAPIVersion(String host) {
+        String response = restUtils.sendGetCommand(
+                host + urlLoader.imageFind + "/version", map).get("body");
 
-		if (response == null)
-			return null;
-		if (response.equalsIgnoreCase(apiVersion))
-			return true;
-		return false;
-	}
+        if (response == null)
+            return null;
+        if (response.equalsIgnoreCase(apiVersion))
+            return true;
+        return false;
+    }
 
-	/**
-	 * Appel de l'url spring-secu pour suppression session côté serveur
-	 * 
-	 */
-	public String disconnect() {
-		if (fileUtils.isInFileExplorer()) {
-			log.log(Level.SEVERE,
-					"You are currently in a container file explorer. Please exit it with close-explorer command");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
-		restUtils.sendGetCommand(finalHost + "/user/logout", map);
-		resetPrompt();
+    /**
+     * Appel de l'url spring-secu pour suppression session côté serveur
+     */
+    public String disconnect() {
+        if (fileUtils.isInFileExplorer()) {
+            log.log(Level.SEVERE,
+                    "You are currently in a container file explorer. Please exit it with close-explorer command");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
+        restUtils.sendGetCommand(finalHost + "/user/logout", map);
+        resetPrompt();
 
-		return null;
-	}
+        return null;
+    }
 
-	public Map<String, Object> getMap() {
-		return map;
-	}
+    public Map<String, Object> getMap() {
+        return map;
+    }
 
-	public void setMap(Map<String, Object> map) {
-		this.map = map;
-	}
+    public void setMap(Map<String, Object> map) {
+        this.map = map;
+    }
 
-	public void resetPrompt() {
-		clPromptProvider.setPrompt("cloudunit> ");
-	}
+    public void resetPrompt() {
+        clPromptProvider.setPrompt("cloudunit> ");
+    }
 
 }

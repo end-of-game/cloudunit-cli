@@ -33,79 +33,79 @@ import fr.treeptik.cloudunit.cli.rest.RestUtils;
 @Component
 public class UserUtils {
 
-	@InjectLogger
-	private Logger log;
+    @InjectLogger
+    private Logger log;
 
-	@Autowired
-	private UrlLoader urlLoader;
+    @Autowired
+    private UrlLoader urlLoader;
 
-	@Autowired
-	private AuthentificationUtils authentificationUtils;
+    @Autowired
+    private AuthentificationUtils authentificationUtils;
 
-	@Autowired
-	private RestUtils restUtils;
+    @Autowired
+    private RestUtils restUtils;
 
-	@Autowired
-	private ShellStatusCommand statusCommand;
+    @Autowired
+    private ShellStatusCommand statusCommand;
 
-	@Autowired
-	private CheckUtils checkUtils;
+    @Autowired
+    private CheckUtils checkUtils;
 
-	@Autowired
-	private FileUtils fileUtils;
+    @Autowired
+    private FileUtils fileUtils;
 
-	public String changePassword() {
+    public String changePassword() {
 
-		String oldPassword, newPassword, newPassword2 = "";
+        String oldPassword, newPassword, newPassword2 = "";
 
-		if (authentificationUtils.getMap().isEmpty()) {
-			log.log(Level.SEVERE,
-					"You are not connected to CloudUnit host! Please use connect command");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
-		if (fileUtils.isInFileExplorer()) {
-			log.log(Level.SEVERE,
-					"You are currently in a container file explorer. Please exit it with close-explorer command");
-			statusCommand.setExitStatut(1);
-			return null;
-		}
-		try {
-			log.log(Level.INFO, "Enter your old password : ");
-			oldPassword = new ConsoleReader()
-					.readLine(new Character('*'));
-			log.log(Level.INFO, "Enter your new password : ");
-			newPassword = new ConsoleReader()
-					.readLine(new Character('*'));
-			log.log(Level.INFO, "Please confirm your new password : ");
-			newPassword2 = new ConsoleReader()
-					.readLine(new Character('*'));
+        if (authentificationUtils.getMap().isEmpty()) {
+            log.log(Level.SEVERE,
+                    "You are not connected to CloudUnit host! Please use connect command");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
+        if (fileUtils.isInFileExplorer()) {
+            log.log(Level.SEVERE,
+                    "You are currently in a container file explorer. Please exit it with close-explorer command");
+            statusCommand.setExitStatut(1);
+            return null;
+        }
+        try {
+            log.log(Level.INFO, "Enter your old password : ");
+            oldPassword = new ConsoleReader()
+                    .readLine(new Character('*'));
+            log.log(Level.INFO, "Enter your new password : ");
+            newPassword = new ConsoleReader()
+                    .readLine(new Character('*'));
+            log.log(Level.INFO, "Please confirm your new password : ");
+            newPassword2 = new ConsoleReader()
+                    .readLine(new Character('*'));
 
-			if (!newPassword2.equalsIgnoreCase(newPassword)) {
-				log.log(Level.SEVERE,
-						"The password confirmation is incorrect! Please retry!");
-				return null;
-			}
+            if (!newPassword2.equalsIgnoreCase(newPassword)) {
+                log.log(Level.SEVERE,
+                        "The password confirmation is incorrect! Please retry!");
+                return null;
+            }
 
-			Map<String, String> parameters = new HashMap<>();
+            Map<String, String> parameters = new HashMap<>();
 
-			parameters.put("password", oldPassword);
-			parameters.put("newPassword", newPassword);
-			restUtils.sendPutCommand(authentificationUtils.finalHost
-					+ "/user/change-password", authentificationUtils.getMap(),
-					parameters);
-			log.log(Level.INFO, "Your password was successfully changed");
+            parameters.put("password", oldPassword);
+            parameters.put("newPassword", newPassword);
+            restUtils.sendPutCommand(authentificationUtils.finalHost
+                            + "/user/change-password", authentificationUtils.getMap(),
+                    parameters);
+            log.log(Level.INFO, "Your password was successfully changed");
 
-			statusCommand.setExitStatut(0);
-		} catch (ResourceAccessException e) {
-			log.log(Level.SEVERE,
-					"The CLI can't etablished connexion with host servers. Please try later or contact an admin");
-			statusCommand.setExitStatut(1);
-			return null;
-		} catch (Exception e) {
-			statusCommand.setExitStatut(1);
-			return null;
-		}
-		return null;
-	}
+            statusCommand.setExitStatut(0);
+        } catch (ResourceAccessException e) {
+            log.log(Level.SEVERE,
+                    "The CLI can't etablished connexion with host servers. Please try later or contact an admin");
+            statusCommand.setExitStatut(1);
+            return null;
+        } catch (Exception e) {
+            statusCommand.setExitStatut(1);
+            return null;
+        }
+        return null;
+    }
 }

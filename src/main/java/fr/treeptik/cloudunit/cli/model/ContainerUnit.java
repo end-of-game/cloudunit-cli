@@ -21,20 +21,20 @@ package fr.treeptik.cloudunit.cli.model;
 
 public class ContainerUnit {
 
-	private String name;
-	private String id;
-	private String type;
+    private String name;
+    private String id;
+    private String type;
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getType() {
+        return type;
+    }
 
 }

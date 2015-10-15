@@ -19,91 +19,91 @@ import java.io.Serializable;
 
 public class FileUnit implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String name;
-	private String user;
-	private String day;
-	private String month;
-	private String hour;
-	private boolean safe;
-	private boolean dir;
-	private boolean exec;
-	private String breadcrump;
+    private String name;
+    private String user;
+    private String day;
+    private String month;
+    private String hour;
+    private boolean safe;
+    private boolean dir;
+    private boolean exec;
+    private String breadcrump;
 
-	public FileUnit() {
-	}
+    public FileUnit() {
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getUser() {
-		return user;
-	}
+    public String getUser() {
+        return user;
+    }
 
-	public void setUser(String user) {
-		this.user = user;
-	}
+    public void setUser(String user) {
+        this.user = user;
+    }
 
-	public String getDay() {
-		return day;
-	}
+    public String getDay() {
+        return day;
+    }
 
-	public void setDay(String day) {
-		this.day = day;
-	}
+    public void setDay(String day) {
+        this.day = day;
+    }
 
-	public String getMonth() {
-		return month;
-	}
+    public String getMonth() {
+        return month;
+    }
 
-	public void setMonth(String month) {
-		this.month = month;
-	}
+    public void setMonth(String month) {
+        this.month = month;
+    }
 
-	public String getHour() {
-		return hour;
-	}
+    public String getHour() {
+        return hour;
+    }
 
-	public void setHour(String hour) {
-		this.hour = hour;
-	}
+    public void setHour(String hour) {
+        this.hour = hour;
+    }
 
-	public boolean isSafe() {
-		return safe;
-	}
+    public boolean isSafe() {
+        return safe;
+    }
 
-	public void setSafe(boolean safe) {
-		this.safe = safe;
-	}
+    public void setSafe(boolean safe) {
+        this.safe = safe;
+    }
 
-	public boolean isDir() {
-		return dir;
-	}
+    public boolean isDir() {
+        return dir;
+    }
 
-	public void setDir(boolean dir) {
-		this.dir = dir;
-	}
+    public void setDir(boolean dir) {
+        this.dir = dir;
+    }
 
-	public boolean isExec() {
-		return exec;
-	}
+    public boolean isExec() {
+        return exec;
+    }
 
-	public void setExec(boolean exec) {
-		this.exec = exec;
-	}
+    public void setExec(boolean exec) {
+        this.exec = exec;
+    }
 
-	public String getBreadcrump() {
-		return breadcrump;
-	}
+    public String getBreadcrump() {
+        return breadcrump;
+    }
 
-	public void setBreadcrumb(String breadcrump) {
-		this.breadcrump = breadcrump;
-	}
+    public void setBreadcrumb(String breadcrump) {
+        this.breadcrump = breadcrump;
+    }
 
 }

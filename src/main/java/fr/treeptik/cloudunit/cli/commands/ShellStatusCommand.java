@@ -24,36 +24,35 @@ import org.springframework.stereotype.Component;
 @Component
 public class ShellStatusCommand implements CommandMarker {
 
-	@Value("${cli.version}")
-	public String cliVersion;
+    @Value("${cli.version}")
+    public String cliVersion;
+    private Integer exitStatut;
 
-	public ShellStatusCommand() {
-		this.exitStatut = 0;
-	}
+    public ShellStatusCommand() {
+        this.exitStatut = 0;
+    }
 
-	private Integer exitStatut;
+    @CliCommand(value = "echo", help = "Get exit code of the last executed CU command")
+    public Integer echo(@CliOption(key = {"s"}) String element) {
+        return exitStatut;
+    }
 
-	@CliCommand(value = "echo", help = "Get exit code of the last executed CU command")
-	public Integer echo(@CliOption(key = { "s" }) String element) {
-		return exitStatut;
-	}
+    @CliCommand(value = "version", help = "Get the current version")
+    public String version() {
+        return cliVersion;
+    }
 
-	@CliCommand(value = "version", help = "Get the current version")
-	public String version() {
-		return cliVersion;
-	}
+    public Integer getExitStatut() {
+        return exitStatut;
+    }
 
-	public Integer getExitStatut() {
-		return exitStatut;
-	}
-
-	/**
-	 * Functionnal status = 0 / error status = 1
-	 * 
-	 * @param exitStatut
-	 */
-	public void setExitStatut(Integer exitStatut) {
-		this.exitStatut = exitStatut;
-	}
+    /**
+     * Functionnal status = 0 / error status = 1
+     *
+     * @param exitStatut
+     */
+    public void setExitStatut(Integer exitStatut) {
+        this.exitStatut = exitStatut;
+    }
 
 }

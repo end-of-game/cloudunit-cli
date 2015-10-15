@@ -22,112 +22,109 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class Image implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    public final static Integer DISABLED = 0;
+    public final static Integer ENABLED = 1;
+    public final static String MODULE = "module";
+    public final static String SERVER = "server";
+    private static final long serialVersionUID = 1L;
+    private Integer id;
+    private String name;
+    private String path;
+    private String cmd;
+    private String version;
+    private String status;
+    private String imageType;
+    private String managerName;
 
-	public final static Integer DISABLED = 0;
-	public final static Integer ENABLED = 1;
+    @JsonIgnore
+    private List<Module> modules;
+    @JsonIgnore
+    private List<Server> servers;
 
-	public final static String MODULE = "module";
-	public final static String SERVER = "server";
+    public Integer getId() {
+        return id;
+    }
 
-	private Integer id;
-	private String name;
-	private String path;
-	private String cmd;
-	private String version;
-	private String status;
-	private String imageType;
-	private String managerName;
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	@JsonIgnore
-	private List<Module> modules;
-	@JsonIgnore
-	private List<Server> servers;
+    public String getName() {
+        return name;
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public String getPath() {
+        return path;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setPath(String path) {
+        this.path = path;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public List<Module> getModules() {
+        return modules;
+    }
 
-	public String getPath() {
-		return path;
-	}
+    public void setModules(List<Module> modules) {
+        this.modules = modules;
+    }
 
-	public void setPath(String path) {
-		this.path = path;
-	}
+    public List<Server> getServers() {
+        return servers;
+    }
 
-	public List<Module> getModules() {
-		return modules;
-	}
+    public void setServers(List<Server> servers) {
+        this.servers = servers;
+    }
 
-	public void setModules(List<Module> modules) {
-		this.modules = modules;
-	}
+    public String getVersion() {
+        return version;
+    }
 
-	public List<Server> getServers() {
-		return servers;
-	}
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
-	public void setServers(List<Server> servers) {
-		this.servers = servers;
-	}
+    public String getCmd() {
+        return cmd;
+    }
 
-	public String getVersion() {
-		return version;
-	}
+    public void setCmd(String cmd) {
+        this.cmd = cmd;
+    }
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public String getCmd() {
-		return cmd;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public void setCmd(String cmd) {
-		this.cmd = cmd;
-	}
+    public String getImageType() {
+        return imageType;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public String getManagerName() {
+        return managerName;
+    }
 
-	public String getImageType() {
-		return imageType;
-	}
+    public void setManagerName(String managerName) {
+        this.managerName = managerName;
+    }
 
-	public void setImageType(String imageType) {
-		this.imageType = imageType;
-	}
-
-	public String getManagerName() {
-		return managerName;
-	}
-
-	public void setManagerName(String managerName) {
-		this.managerName = managerName;
-	}
-
-	@Override
-	public String toString() {
-		return "Image [id=" + id + ", name=" + name + ", path=" + path
-				+ ", version=" + version + "]";
-	}
+    @Override
+    public String toString() {
+        return "Image [id=" + id + ", name=" + name + ", path=" + path
+                + ", version=" + version + "]";
+    }
 
 }

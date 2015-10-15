@@ -21,38 +21,38 @@ import java.util.Map;
 
 public class Module extends Container implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Map<String, String> moduleInfos = new HashMap<>();
+    private Map<String, String> moduleInfos = new HashMap<>();
 
-	private String managerLocation;
+    private String managerLocation;
 
-	public Module() {
-	}
+    public Module() {
+    }
 
-	public Map<String, String> getModuleInfos() {
-		return moduleInfos;
-	}
+    public Map<String, String> getModuleInfos() {
+        return moduleInfos;
+    }
 
-	public void setModuleInfos(Map<String, String> moduleInfos) {
-		this.moduleInfos = moduleInfos;
-	}
+    public void setModuleInfos(Map<String, String> moduleInfos) {
+        this.moduleInfos = moduleInfos;
+    }
 
-	public String getManagerLocation() {
-		return managerLocation;
-	}
+    public String getManagerLocation() {
+        return managerLocation;
+    }
 
-	public void setManagerLocation(String managerLocation) {
-		this.managerLocation = managerLocation;
-	}
+    public void setManagerLocation(String managerLocation) {
+        this.managerLocation = managerLocation;
+    }
 
-	@Override
-	public String toString() {
-		return "Module [id=" + id + ", startDate=" + startDate + ", name="
-				+ name + ", cloudId=" + containerID + ", memorySize="
-				+ memorySize + ", containerID=" + containerIP
-				+ ", dockerState=" + dockerState + ", moduleInfos="
-				+ moduleInfos + ", listPorts=" + listPorts + ", image=" + image
-				+ ", status=" + status + "]";
-	}
+    @Override
+    public String toString() {
+        return "Module [id=" + id + ", startDate=" + startDate + ", name="
+                + name + ", cloudId=" + containerID + ", memorySize="
+                + memorySize + ", containerID=" + containerIP
+                + ", dockerState=" + dockerState + ", moduleInfos="
+                + moduleInfos + ", listPorts=" + listPorts + ", image=" + image
+                + ", status=" + status + "]";
+    }
 }

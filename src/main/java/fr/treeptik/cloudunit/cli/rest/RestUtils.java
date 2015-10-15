@@ -66,244 +66,242 @@ import fr.treeptik.cloudunit.cli.utils.AuthentificationUtils;
 @Component
 public class RestUtils {
 
-	private static Logger logger = Logger.getLogger("RestUtils");
+    private static Logger logger = Logger.getLogger("RestUtils");
+    public HttpClientContext localContext;
+    @Autowired
+    private AuthentificationUtils authentificationUtils;
 
-	@Autowired
-	private AuthentificationUtils authentificationUtils;
+    public Map<String, String> connect(String url,
+                                       Map<String, Object> parameters) {
 
-	public HttpClientContext localContext;
+        Map<String, String> response = new HashMap<String, String>();
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        List<NameValuePair> nvps = new ArrayList<>();
+        nvps.add(new BasicNameValuePair("j_username", (String) parameters
+                .get("login")));
+        nvps.add(new BasicNameValuePair("j_password", (String) parameters
+                .get("password")));
+        localContext = HttpClientContext.create();
+        localContext.setCookieStore(new BasicCookieStore());
+        HttpPost httpPost = new HttpPost(url);
 
-	public Map<String, String> connect(String url,
-			Map<String, Object> parameters) {
+        try {
+            httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+            CloseableHttpResponse httpResponse = httpclient.execute(httpPost,
+                    localContext);
+            ResponseHandler<String> handler = new CustomResponseErrorHandler();
+            String body = handler.handleResponse(httpResponse);
+            response.put("body", body);
+            httpResponse.close();
+        } catch (Exception e) {
+            authentificationUtils.getMap().clear();
+        }
 
-		Map<String, String> response = new HashMap<String, String>();
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		List<NameValuePair> nvps = new ArrayList<>();
-		nvps.add(new BasicNameValuePair("j_username", (String) parameters
-				.get("login")));
-		nvps.add(new BasicNameValuePair("j_password", (String) parameters
-				.get("password")));
-		localContext = HttpClientContext.create();
-		localContext.setCookieStore(new BasicCookieStore());
-		HttpPost httpPost = new HttpPost(url);
+        return response;
+    }
 
-		try {
-			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-			CloseableHttpResponse httpResponse = httpclient.execute(httpPost,
-					localContext);
-			ResponseHandler<String> handler = new CustomResponseErrorHandler();
-			String body = handler.handleResponse(httpResponse);
-			response.put("body", body);
-			httpResponse.close();
-		} catch (Exception e) {
-			authentificationUtils.getMap().clear();
-		}
+    /**
+     * sendGetCommand
+     *
+     * @param url
+     * @param parameters
+     * @return
+     */
+    public Map<String, String> sendGetCommand(String url,
+                                              Map<String, Object> parameters) {
+        Map<String, String> response = new HashMap<String, String>();
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpGet httpget = new HttpGet(url);
+        try {
+            CloseableHttpResponse httpResponse = httpclient.execute(httpget,
+                    localContext);
+            ResponseHandler<String> handler = new CustomResponseErrorHandler();
+            String body = handler.handleResponse(httpResponse);
+            response.put("body", body);
+            httpResponse.close();
 
-		return response;
-	}
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
 
-	/**
-	 * sendGetCommand
-	 * 
-	 * @param url
-	 * @param parameters
-	 * @return
-	 */
-	public Map<String, String> sendGetCommand(String url,
-			Map<String, Object> parameters) {
-		Map<String, String> response = new HashMap<String, String>();
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		HttpGet httpget = new HttpGet(url);
-		try {
-			CloseableHttpResponse httpResponse = httpclient.execute(httpget,
-					localContext);
-			ResponseHandler<String> handler = new CustomResponseErrorHandler();
-			String body = handler.handleResponse(httpResponse);
-			response.put("body", body);
-			httpResponse.close();
+        return response;
+    }
 
-		} catch (Exception e) {
-			logger.log(Level.SEVERE, e.getMessage());
-		}
+    public Map<String, String> sendGetFileCommand(String url, String filePath,
+                                                  Map<String, Object> parameters) {
+        Map<String, String> response = new HashMap<String, String>();
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpGet httpget = new HttpGet(url);
+        try {
+            CloseableHttpResponse httpResponse = httpclient.execute(httpget,
+                    localContext);
+            InputStream inputStream = httpResponse.getEntity().getContent();
+            FileOutputStream fos = new FileOutputStream(new File(filePath));
+            int inByte;
+            while ((inByte = inputStream.read()) != -1)
+                fos.write(inByte);
+            inputStream.close();
+            fos.close();
+            httpResponse.close();
 
-		return response;
-	}
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
 
-	public Map<String, String> sendGetFileCommand(String url, String filePath,
-			Map<String, Object> parameters) {
-		Map<String, String> response = new HashMap<String, String>();
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		HttpGet httpget = new HttpGet(url);
-		try {
-			CloseableHttpResponse httpResponse = httpclient.execute(httpget,
-					localContext);
-			InputStream inputStream = httpResponse.getEntity().getContent();
-			FileOutputStream fos = new FileOutputStream(new File(filePath));
-			int inByte;
-			while ((inByte = inputStream.read()) != -1)
-				fos.write(inByte);
-			inputStream.close();
-			fos.close();
-			httpResponse.close();
+        return response;
+    }
 
-		} catch (Exception e) {
-			logger.log(Level.SEVERE, e.getMessage());
-		}
+    /**
+     * sendDeleteCommand
+     *
+     * @param url
+     * @return
+     */
+    public Map<String, String> sendDeleteCommand(String url,
+                                                 Map<String, Object> credentials) {
+        Map<String, String> response = new HashMap<String, String>();
+        CloseableHttpClient httpclient = HttpClients.createDefault();
 
-		return response;
-	}
+        HttpDelete httpDelete = new HttpDelete(url);
+        CloseableHttpResponse httpResponse;
+        try {
+            httpResponse = httpclient.execute(httpDelete, localContext);
+            ResponseHandler<String> handler = new CustomResponseErrorHandler();
+            String body = handler.handleResponse(httpResponse);
+            response.put("body", body);
+            httpResponse.close();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
 
-	/**
-	 * sendDeleteCommand
-	 * 
-	 * @param url
-	 * @return
-	 */
-	public Map<String, String> sendDeleteCommand(String url,
-			Map<String, Object> credentials) {
-		Map<String, String> response = new HashMap<String, String>();
-		CloseableHttpClient httpclient = HttpClients.createDefault();
+        return response;
+    }
 
-		HttpDelete httpDelete = new HttpDelete(url);
-		CloseableHttpResponse httpResponse;
-		try {
-			httpResponse = httpclient.execute(httpDelete, localContext);
-			ResponseHandler<String> handler = new CustomResponseErrorHandler();
-			String body = handler.handleResponse(httpResponse);
-			response.put("body", body);
-			httpResponse.close();
-		} catch (Exception e) {
-			logger.log(Level.SEVERE, e.getMessage());
-		}
+    /**
+     * sendPostCommand
+     *
+     * @param url
+     * @param parameters
+     * @return
+     * @throws ClientProtocolException
+     */
+    public Map<String, Object> sendPostCommand(String url,
+                                               Map<String, Object> credentials, Map<String, String> parameters)
+            throws ClientProtocolException {
+        Map<String, Object> response = new HashMap<String, Object>();
+        CloseableHttpClient httpclient = HttpClients.createDefault();
 
-		return response;
-	}
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setHeader("Accept", "application/json");
+        httpPost.setHeader("Content-type", "application/json");
 
-	/**
-	 * sendPostCommand
-	 * 
-	 * @param url
-	 * @param parameters
-	 * @return
-	 * @throws ClientProtocolException
-	 */
-	public Map<String, Object> sendPostCommand(String url,
-			Map<String, Object> credentials, Map<String, String> parameters)
-			throws ClientProtocolException {
-		Map<String, Object> response = new HashMap<String, Object>();
-		CloseableHttpClient httpclient = HttpClients.createDefault();
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            StringEntity entity = new StringEntity(
+                    mapper.writeValueAsString(parameters));
+            httpPost.setEntity(entity);
+            CloseableHttpResponse httpResponse = httpclient.execute(httpPost,
+                    localContext);
+            ResponseHandler<String> handler = new CustomResponseErrorHandler();
+            String body = handler.handleResponse(httpResponse);
+            response.put("body", body);
+            httpResponse.close();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            throw new ClientProtocolException();
+        }
 
-		HttpPost httpPost = new HttpPost(url);
-		httpPost.setHeader("Accept", "application/json");
-		httpPost.setHeader("Content-type", "application/json");
+        return response;
+    }
 
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			StringEntity entity = new StringEntity(
-					mapper.writeValueAsString(parameters));
-			httpPost.setEntity(entity);
-			CloseableHttpResponse httpResponse = httpclient.execute(httpPost,
-					localContext);
-			ResponseHandler<String> handler = new CustomResponseErrorHandler();
-			String body = handler.handleResponse(httpResponse);
-			response.put("body", body);
-			httpResponse.close();
-		} catch (Exception e) {
-			logger.log(Level.SEVERE, e.getMessage());
-			throw new ClientProtocolException();
-		}
+    /**
+     * sendPutCommand
+     *
+     * @param url
+     * @param parameters
+     * @return
+     * @throws ClientProtocolException
+     */
+    public Map<String, Object> sendPutCommand(String url,
+                                              Map<String, Object> credentials, Map<String, String> parameters)
+            throws ClientProtocolException {
+        Map<String, Object> response = new HashMap<String, Object>();
+        CloseableHttpClient httpclient = HttpClients.createDefault();
 
-		return response;
-	}
+        HttpPut httpPut = new HttpPut(url);
+        httpPut.setHeader("Accept", "application/json");
+        httpPut.setHeader("Content-type", "application/json");
 
-	/**
-	 * sendPutCommand
-	 * 
-	 * @param url
-	 * @param parameters
-	 * @return
-	 * @throws ClientProtocolException
-	 */
-	public Map<String, Object> sendPutCommand(String url,
-			Map<String, Object> credentials, Map<String, String> parameters)
-			throws ClientProtocolException {
-		Map<String, Object> response = new HashMap<String, Object>();
-		CloseableHttpClient httpclient = HttpClients.createDefault();
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            StringEntity entity = new StringEntity(
+                    mapper.writeValueAsString(parameters));
+            httpPut.setEntity(entity);
+            CloseableHttpResponse httpResponse = httpclient.execute(httpPut,
+                    localContext);
+            ResponseHandler<String> handler = new CustomResponseErrorHandler();
+            String body = handler.handleResponse(httpResponse);
+            response.put("body", body);
+            httpResponse.close();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            throw new ClientProtocolException();
+        }
 
-		HttpPut httpPut = new HttpPut(url);
-		httpPut.setHeader("Accept", "application/json");
-		httpPut.setHeader("Content-type", "application/json");
+        return response;
+    }
 
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			StringEntity entity = new StringEntity(
-					mapper.writeValueAsString(parameters));
-			httpPut.setEntity(entity);
-			CloseableHttpResponse httpResponse = httpclient.execute(httpPut,
-					localContext);
-			ResponseHandler<String> handler = new CustomResponseErrorHandler();
-			String body = handler.handleResponse(httpResponse);
-			response.put("body", body);
-			httpResponse.close();
-		} catch (Exception e) {
-			logger.log(Level.SEVERE, e.getMessage());
-			throw new ClientProtocolException();
-		}
+    /**
+     * sendPostCommand
+     *
+     * @param url
+     * @param parameters
+     * @return
+     * @throws ClientProtocolException
+     */
+    public Map<String, Object> sendPostForUpload(String url,
+                                                 Map<String, Object> parameters) {
+        RestTemplate restTemplate = new RestTemplate();
+        List<HttpMessageConverter<?>> mc = restTemplate.getMessageConverters();
+        mc.add(new MappingJacksonHttpMessageConverter());
+        restTemplate.setErrorHandler(new CustomResponseErrorHandlerForUpload());
+        restTemplate.setMessageConverters(mc);
+        MultiValueMap<String, Object> postParams = new LinkedMultiValueMap<String, Object>();
+        postParams.setAll(parameters);
+        Map<String, Object> response = new HashMap<String, Object>();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "multipart/form-data");
+        headers.set("Accept", "application/json");
+        headers.add("Cookie", "JSESSIONID="
+                + localContext.getCookieStore().getCookies().get(0).getValue());
+        org.springframework.http.HttpEntity<Object> request = new org.springframework.http.HttpEntity<Object>(
+                postParams, headers);
+        ResponseEntity<?> result = restTemplate.exchange(url, HttpMethod.POST,
+                request, String.class);
+        String body = result.getBody().toString();
+        MediaType contentType = result.getHeaders().getContentType();
+        HttpStatus statusCode = result.getStatusCode();
+        response.put("content-type", contentType);
+        response.put("statusCode", statusCode);
+        response.put("body", body);
 
-		return response;
-	}
+        return response;
+    }
 
-	/**
-	 * sendPostCommand
-	 * 
-	 * @param url
-	 * @param parameters
-	 * @return
-	 * @throws ClientProtocolException
-	 */
-	public Map<String, Object> sendPostForUpload(String url,
-			Map<String, Object> parameters) {
-		RestTemplate restTemplate = new RestTemplate();
-		List<HttpMessageConverter<?>> mc = restTemplate.getMessageConverters();
-		mc.add(new MappingJacksonHttpMessageConverter());
-		restTemplate.setErrorHandler(new CustomResponseErrorHandlerForUpload());
-		restTemplate.setMessageConverters(mc);
-		MultiValueMap<String, Object> postParams = new LinkedMultiValueMap<String, Object>();
-		postParams.setAll(parameters);
-		Map<String, Object> response = new HashMap<String, Object>();
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Content-Type", "multipart/form-data");
-		headers.set("Accept", "application/json");
-		headers.add("Cookie", "JSESSIONID="
-				+ localContext.getCookieStore().getCookies().get(0).getValue());
-		org.springframework.http.HttpEntity<Object> request = new org.springframework.http.HttpEntity<Object>(
-				postParams, headers);
-		ResponseEntity<?> result = restTemplate.exchange(url, HttpMethod.POST,
-				request, String.class);
-		String body = result.getBody().toString();
-		MediaType contentType = result.getHeaders().getContentType();
-		HttpStatus statusCode = result.getStatusCode();
-		response.put("content-type", contentType);
-		response.put("statusCode", statusCode);
-		response.put("body", body);
+    private class CustomResponseErrorHandlerForUpload implements
+            ResponseErrorHandler {
 
-		return response;
-	}
+        private ResponseErrorHandler errorHandler = new DefaultResponseErrorHandler();
 
-	private class CustomResponseErrorHandlerForUpload implements
-			ResponseErrorHandler {
+        public boolean hasError(ClientHttpResponse response) throws IOException {
+            return errorHandler.hasError(response);
+        }
 
-		private ResponseErrorHandler errorHandler = new DefaultResponseErrorHandler();
+        public void handleError(ClientHttpResponse response) throws IOException {
+            String body = IOUtils.toString(response.getBody());
+            JsonResponseError error = JsonConverter.getError(body);
+            logger.log(Level.SEVERE, error.getMessage());
+        }
 
-		public boolean hasError(ClientHttpResponse response) throws IOException {
-			return errorHandler.hasError(response);
-		}
-
-		public void handleError(ClientHttpResponse response) throws IOException {
-			String body = IOUtils.toString(response.getBody());
-			JsonResponseError error = JsonConverter.getError(body);
-			logger.log(Level.SEVERE, error.getMessage());
-		}
-
-	}
+    }
 }

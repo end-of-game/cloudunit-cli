@@ -32,46 +32,46 @@ import org.springframework.util.ReflectionUtils;
 @Component
 public class LoggerPostProcessor implements BeanPostProcessor {
 
-	public Object postProcessBeforeInitialization(final Object bean,
-			String beanName) throws BeansException {
-		ReflectionUtils.doWithFields(bean.getClass(),
-				new ReflectionUtils.FieldCallback() {
+    public Object postProcessBeforeInitialization(final Object bean,
+                                                  String beanName) throws BeansException {
+        ReflectionUtils.doWithFields(bean.getClass(),
+                new ReflectionUtils.FieldCallback() {
 
-					public void doWith(Field field)
-							throws IllegalArgumentException,
-							IllegalAccessException {
+                    public void doWith(Field field)
+                            throws IllegalArgumentException,
+                            IllegalAccessException {
 
-						if (field.getAnnotation(InjectLogger.class) != null
-								&& field.getType().equals(Logger.class)) {
-							ReflectionUtils.makeAccessible(field);
-							Logger logger = Logger.getLogger(bean.getClass()
-									.getName());
+                        if (field.getAnnotation(InjectLogger.class) != null
+                                && field.getType().equals(Logger.class)) {
+                            ReflectionUtils.makeAccessible(field);
+                            Logger logger = Logger.getLogger(bean.getClass()
+                                    .getName());
 
-							field.set(bean, logger);
+                            field.set(bean, logger);
 
-							StreamHandler fileHandler;
-							try {
+                            StreamHandler fileHandler;
+                            try {
 
-								FileOutputStream fileOutputStream = new FileOutputStream(
-										new File("errors.log"), true);
-								fileHandler = new StreamHandler(
-										fileOutputStream, new SimpleFormatter());
-								fileHandler.setLevel(Level.SEVERE);
-								logger.addHandler(fileHandler);
+                                FileOutputStream fileOutputStream = new FileOutputStream(
+                                        new File("errors.log"), true);
+                                fileHandler = new StreamHandler(
+                                        fileOutputStream, new SimpleFormatter());
+                                fileHandler.setLevel(Level.SEVERE);
+                                logger.addHandler(fileHandler);
 
-							} catch (SecurityException | IOException e) {
-								throw new IllegalArgumentException(e);
-							}
+                            } catch (SecurityException | IOException e) {
+                                throw new IllegalArgumentException(e);
+                            }
 
-						}
-					}
-				});
+                        }
+                    }
+                });
 
-		return bean;
-	}
+        return bean;
+    }
 
-	public Object postProcessAfterInitialization(Object bean, String beanName)
-			throws BeansException {
-		return bean;
-	}
+    public Object postProcessAfterInitialization(Object bean, String beanName)
+            throws BeansException {
+        return bean;
+    }
 }

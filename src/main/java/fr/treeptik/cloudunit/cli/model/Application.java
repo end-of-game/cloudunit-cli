@@ -25,8 +25,7 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import fr.treeptik.cloudunit.cli.rest.JsonDateDeserializer;
 
 public class Application
-    implements Serializable
-{
+        implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,7 +37,7 @@ public class Application
 
     private String location;
 
-    @JsonDeserialize( using = JsonDateDeserializer.class )
+    @JsonDeserialize(using = JsonDateDeserializer.class)
     private Date date;
 
     private User user;
@@ -78,221 +77,178 @@ public class Application
 
     private boolean isAClone;
 
-    public Application()
-    {
+    public Application() {
     }
 
-    public Integer getId()
-    {
+    public Integer getId() {
         return id;
     }
 
-    public void setId( Integer id )
-    {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName( String name )
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
     /**
      * @return the String representation of the enum's value
      */
-    public String getStatus()
-    {
+    public String getStatus() {
         return status.name();
     }
 
-    public void setStatus( Status status )
-    {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public User getUser()
-    {
+    public User getUser() {
         return user;
     }
 
-    public void setUser( User user )
-    {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public List<Module> getModules()
-    {
+    public List<Module> getModules() {
         return modules;
     }
 
-    public void setModules( List<Module> modules )
-    {
+    public void setModules(List<Module> modules) {
         this.modules = modules;
     }
 
-    public Date getDate()
-    {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate( Date date )
-    {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public List<Server> getServers()
-    {
+    public List<Server> getServers() {
         return servers;
     }
 
-    public void setServers( List<Server> servers )
-    {
+    public void setServers(List<Server> servers) {
         this.servers = servers;
     }
 
-    public List<Deployment> getDeployments()
-    {
+    public List<Deployment> getDeployments() {
         return deployments;
     }
 
-    public void setDeployments( List<Deployment> deployments )
-    {
+    public void setDeployments(List<Deployment> deployments) {
         this.deployments = deployments;
     }
 
-    public String getGitAddress()
-    {
+    public String getGitAddress() {
         return gitAddress;
     }
 
-    public void setGitAddress( String gitAddress )
-    {
+    public void setGitAddress(String gitAddress) {
         this.gitAddress = gitAddress;
     }
 
-    public String getManagerHost()
-    {
+    public String getManagerHost() {
         return managerHost;
     }
 
-    public void setManagerHost( String managerHost )
-    {
+    public void setManagerHost(String managerHost) {
         this.managerHost = managerHost;
     }
 
-    public void setManagerHost( String managerIP, String managerPort )
-    {
+    public void setManagerHost(String managerIP, String managerPort) {
         this.managerHost = managerIP + ":" + managerPort;
     }
 
-    public void setSuffixCloudUnitIO( String suffixCloudUnitIO )
-    {
-        this.suffixCloudUnitIO = suffixCloudUnitIO;
-    }
-
-    public String getSuffixCloudUnitIO()
-    {
+    public String getSuffixCloudUnitIO() {
         return suffixCloudUnitIO;
     }
 
-    public String getPrefixCloudUnitPhpMyAdmin()
-    {
+    public void setSuffixCloudUnitIO(String suffixCloudUnitIO) {
+        this.suffixCloudUnitIO = suffixCloudUnitIO;
+    }
+
+    public String getPrefixCloudUnitPhpMyAdmin() {
         return prefixCloudUnitPhpMyAdmin;
     }
 
-    public void setPrefixCloudUnitPhpMyAdmin( String prefixCloudUnitPhpMyAdmin )
-    {
+    public void setPrefixCloudUnitPhpMyAdmin(String prefixCloudUnitPhpMyAdmin) {
         this.prefixCloudUnitPhpMyAdmin = prefixCloudUnitPhpMyAdmin;
     }
 
-    public String getManagerIp()
-    {
+    public String getManagerIp() {
         return managerIp;
     }
 
-    public void setManagerIp( String managerIp )
-    {
+    public void setManagerIp(String managerIp) {
         this.managerIp = managerIp;
     }
 
-    public String getManagerPort()
-    {
+    public String getManagerPort() {
         return managerPort;
     }
 
-    public void setManagerPort( String managerPort )
-    {
+    public void setManagerPort(String managerPort) {
         this.managerPort = managerPort;
     }
 
-    public String getLocation()
-    {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation( String location )
-    {
+    public void setLocation(String location) {
         this.location = location;
     }
 
-    public List<String> getAliases()
-    {
+    public List<String> getAliases() {
         return aliases;
     }
 
-    public void setAliases( List<String> aliases )
-    {
+    public void setAliases(List<String> aliases) {
         this.aliases = aliases;
     }
 
-    public String getJvmRelease()
-    {
+    public String getJvmRelease() {
         return jvmRelease;
     }
 
-    public void setJvmRelease( String jvmRelease )
-    {
+    public void setJvmRelease(String jvmRelease) {
         this.jvmRelease = jvmRelease;
     }
 
-    public String getDomainName()
-    {
+    public String getDomainName() {
         return domainName;
     }
 
-    public void setDomainName( String domainName )
-    {
+    public void setDomainName(String domainName) {
         this.domainName = domainName;
     }
 
-    public boolean isAClone()
-    {
+    public boolean isAClone() {
         return isAClone;
     }
 
-    public void setAClone( boolean isAClone )
-    {
+    public void setAClone(boolean isAClone) {
         this.isAClone = isAClone;
     }
 
-    public String getDeploymentStatus()
-    {
+    public String getDeploymentStatus() {
         return deploymentStatus;
     }
 
-    public void setDeploymentStatus( String deploymentStatus )
-    {
+    public void setDeploymentStatus(String deploymentStatus) {
         this.deploymentStatus = deploymentStatus;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Application [id=" + id + ", name=" + name + ", date=" + date + ", user=" + user + "]";
     }
 

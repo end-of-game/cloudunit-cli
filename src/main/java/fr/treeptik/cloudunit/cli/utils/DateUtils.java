@@ -20,16 +20,16 @@ import java.util.Date;
 
 public class DateUtils {
 
-	
-	public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm";
-	
-	private static SimpleDateFormat dateFormat = 
-			new SimpleDateFormat(DATE_PATTERN);
-	
-	public static String formatDate(Date date){
-		
-		return dateFormat.format(date);
-		
-	}
-	
+
+    public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm";
+
+    private static SimpleDateFormat dateFormat =
+            new SimpleDateFormat(DATE_PATTERN);
+
+    public static String formatDate(Date date) {
+
+        return dateFormat.format(date);
+
+    }
+
 }

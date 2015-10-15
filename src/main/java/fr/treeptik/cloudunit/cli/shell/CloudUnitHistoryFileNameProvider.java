@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
-public class CloudUnitHistoryFileNameProvider implements CommandMarker, HistoryFileNameProvider{
+public class CloudUnitHistoryFileNameProvider implements CommandMarker, HistoryFileNameProvider {
 
 
     @Override

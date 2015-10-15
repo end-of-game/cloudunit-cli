@@ -12,10 +12,6 @@ import org.springframework.stereotype.Component;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CloudUnitPromptProvider
         implements PromptProvider, CommandMarker {
-    public void setPrompt(String prompt) {
-        this.prompt = prompt;
-    }
-
     @Value("${default.prompt}")
     private String prompt;
 
@@ -25,6 +21,10 @@ public class CloudUnitPromptProvider
 
     public String getPrompt() {
         return prompt + " ";
+    }
+
+    public void setPrompt(String prompt) {
+        this.prompt = prompt;
     }
 
 }

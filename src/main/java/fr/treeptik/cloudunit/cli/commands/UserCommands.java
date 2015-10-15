@@ -29,36 +29,36 @@ import fr.treeptik.cloudunit.cli.utils.UserUtils;
 @Component
 public class UserCommands implements CommandMarker {
 
-	@Autowired
-	private AuthentificationUtils authentificationUtils;
+    @Autowired
+    private AuthentificationUtils authentificationUtils;
 
-	@Autowired
-	private ApplicationUtils applicationUtils;
+    @Autowired
+    private ApplicationUtils applicationUtils;
 
-	@Autowired
-	private UserUtils userUtils;
+    @Autowired
+    private UserUtils userUtils;
 
-	@Autowired
-	private RestUtils restUtils;
+    @Autowired
+    private RestUtils restUtils;
 
-	@CliCommand(value = "connect", help = "Connect to CloudUnit Host")
-	public String connect(
-			@CliOption(key = { "login" }, mandatory = true, help = "Your login") String login,
-			@CliOption(key = { "password" }, mandatory = false, help = "User password", unspecifiedDefaultValue = "") String password,
-			@CliOption(key = { "host" }, mandatory = false, help = "Host for Cloudunit Platform", unspecifiedDefaultValue = "") String host) {
-		return authentificationUtils.connect(login, password, host);
-	}
+    @CliCommand(value = "connect", help = "Connect to CloudUnit Host")
+    public String connect(
+            @CliOption(key = {"login"}, mandatory = true, help = "Your login") String login,
+            @CliOption(key = {"password"}, mandatory = false, help = "User password", unspecifiedDefaultValue = "") String password,
+            @CliOption(key = {"host"}, mandatory = false, help = "Host for Cloudunit Platform", unspecifiedDefaultValue = "") String host) {
+        return authentificationUtils.connect(login, password, host);
+    }
 
-	@CliCommand(value = "disconnect", help = "Disconnect from your current account")
-	public String disconnect() {
-		if (authentificationUtils.getMap().isEmpty()) {
-			return "Failed! You are not connected.";
-		}
-		authentificationUtils.disconnect();
-		authentificationUtils.getMap().clear();
-		applicationUtils.setApplication(null);
-		restUtils.localContext = null;
-		return "Disconnected";
-	}
+    @CliCommand(value = "disconnect", help = "Disconnect from your current account")
+    public String disconnect() {
+        if (authentificationUtils.getMap().isEmpty()) {
+            return "Failed! You are not connected.";
+        }
+        authentificationUtils.disconnect();
+        authentificationUtils.getMap().clear();
+        applicationUtils.setApplication(null);
+        restUtils.localContext = null;
+        return "Disconnected";
+    }
 
 }

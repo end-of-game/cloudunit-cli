@@ -17,9 +17,9 @@ package fr.treeptik.cloudunit.cli.model;
 
 public class JsonResponseError extends JsonResponse {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public JsonResponseError() {
-	}
+    public JsonResponseError() {
+    }
 
 }
