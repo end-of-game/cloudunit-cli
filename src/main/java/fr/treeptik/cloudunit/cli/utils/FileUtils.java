@@ -35,7 +35,7 @@ import fr.treeptik.cloudunit.cli.model.Server;
 import fr.treeptik.cloudunit.cli.processor.InjectLogger;
 import fr.treeptik.cloudunit.cli.rest.JsonConverter;
 import fr.treeptik.cloudunit.cli.rest.RestUtils;
-import fr.treeptik.cloudunit.cli.shellcustom.CloudUnitPromptProvider;
+import fr.treeptik.cloudunit.cli.shell.CloudUnitPromptProvider;
 
 @Component
 public class FileUtils {

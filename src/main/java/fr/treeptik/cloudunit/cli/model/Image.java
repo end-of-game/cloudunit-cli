@@ -20,8 +20,6 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import fr.treeptik.cloudunit.cli.model.Server;
-
 public class Image implements Serializable {
 
 	private static final long serialVersionUID = 1L;

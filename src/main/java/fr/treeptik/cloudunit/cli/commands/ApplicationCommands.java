@@ -26,7 +26,6 @@ import org.springframework.stereotype.Component;
 
 import fr.treeptik.cloudunit.cli.utils.ApplicationUtils;
 import fr.treeptik.cloudunit.cli.utils.AuthentificationUtils;
-import fr.treeptik.cloudunit.cli.utils.LogsUtils;
 
 @Component
 public class ApplicationCommands

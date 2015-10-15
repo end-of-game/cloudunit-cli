@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jline.console.ConsoleReader;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
@@ -70,13 +72,13 @@ public class UserUtils {
 		}
 		try {
 			log.log(Level.INFO, "Enter your old password : ");
-			oldPassword = new jline.ConsoleReader()
+			oldPassword = new ConsoleReader()
 					.readLine(new Character('*'));
 			log.log(Level.INFO, "Enter your new password : ");
-			newPassword = new jline.ConsoleReader()
+			newPassword = new ConsoleReader()
 					.readLine(new Character('*'));
 			log.log(Level.INFO, "Please confirm your new password : ");
-			newPassword2 = new jline.ConsoleReader()
+			newPassword2 = new ConsoleReader()
 					.readLine(new Character('*'));
 
 			if (!newPassword2.equalsIgnoreCase(newPassword)) {

@@ -20,6 +20,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import fr.treeptik.cloudunit.cli.shell.CloudUnitPromptProvider;
+
+import jline.console.ConsoleReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -28,7 +31,6 @@ import org.springframework.web.client.ResourceAccessException;
 import fr.treeptik.cloudunit.cli.commands.ShellStatusCommand;
 import fr.treeptik.cloudunit.cli.processor.InjectLogger;
 import fr.treeptik.cloudunit.cli.rest.RestUtils;
-import fr.treeptik.cloudunit.cli.shellcustom.CloudUnitPromptProvider;
 
 @Component
 public class AuthentificationUtils {
@@ -95,7 +97,7 @@ public class AuthentificationUtils {
 
 			if (password.equalsIgnoreCase("")) {
 				log.log(Level.INFO, "Enter your password : ");
-				password = new jline.ConsoleReader()
+				password = new ConsoleReader()
 						.readLine(new Character('*'));
 			}
 			Map<String, Object> loginInfo = new HashMap<>();

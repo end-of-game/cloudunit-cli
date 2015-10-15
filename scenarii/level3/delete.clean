@@ -1,9 +1,0 @@
-connect -login johndoe -password abc2015
-
-rm-app -name tomcat73 -scriptUsage
-rm-app -name tomcat83 -scriptUsage
-rm-app -name jboss73 -scriptUsage
-rm-app -name jboss83 -scriptUsage
-
-disconnect
-
