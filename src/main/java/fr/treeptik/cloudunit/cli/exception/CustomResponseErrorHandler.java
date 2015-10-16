@@ -48,13 +48,10 @@ public class CustomResponseErrorHandler implements ResponseHandler<String> {
             while (lineIterator.hasNext()) {
                 jsonStringBuilder.append(lineIterator.nextLine());
             }
-
             JsonResponseError error = JsonConverter
                     .getError(jsonStringBuilder.toString());
             switch (status) {
                 case 500:
-
-
                     throw new ClientProtocolException(error.getMessage());
                 case 401:
                     throw new ClientProtocolException(

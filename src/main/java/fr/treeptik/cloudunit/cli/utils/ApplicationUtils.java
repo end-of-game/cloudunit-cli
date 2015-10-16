@@ -80,11 +80,11 @@ public class ApplicationUtils {
             return checkResponse;
         }
 
-        this.useApplication(application.getName());
+        useApplication(application.getName());
         String dockerManagerIP = application.getManagerIp();
         statusCommand.setExitStatut(0);
 
-        MessageConverter.buildApplicationMessage(this.getApplication(),
+        MessageConverter.buildApplicationMessage(application,
                 dockerManagerIP);
         return "Terminated";
     }
@@ -92,11 +92,19 @@ public class ApplicationUtils {
     public String useApplication(String applicationName) {
         String json = null;
 
-        String checkResponse = checkAndRejectIfError(applicationName);
-        if (checkResponse != null) {
-            return checkResponse;
+        if (authentificationUtils.getMap().isEmpty()) {
+            statusCommand.setExitStatut(1);
+            return ANSIConstants.ANSI_RED
+                    + "You are not connected to CloudUnit host! Please use connect command"
+                    + ANSIConstants.ANSI_RESET;
         }
 
+        if (fileUtils.isInFileExplorer()) {
+            statusCommand.setExitStatut(1);
+            return ANSIConstants.ANSI_RED
+                    + "You are currently in a container file explorer. Please exit it with close-explorer command"
+                    + ANSIConstants.ANSI_RESET;
+        }
 
         try {
             json = restUtils.sendGetCommand(
@@ -109,7 +117,7 @@ public class ApplicationUtils {
         statusCommand.setExitStatut(0);
 
         moduleUtils.setApplicationName(applicationName);
-        this.setApplication(JsonConverter.getApplication(json));
+        setApplication(JsonConverter.getApplication(json));
         clPromptProvider.setPrompt("cloudunit-" + applicationName + "> ");
         return "Current application : " + getApplication().getName();
     }
@@ -158,7 +166,7 @@ public class ApplicationUtils {
             return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
         }
 
-        this.useApplication(applicationName);
+        useApplication(applicationName);
 
         return response;
     }
@@ -173,7 +181,7 @@ public class ApplicationUtils {
             if (checkResponse != null) {
                 return checkResponse;
             }
-            if (this.getApplication() == null) {
+            if (application == null) {
 
                 statusCommand.setExitStatut(1);
                 return ANSIConstants.ANSI_RED
@@ -188,17 +196,17 @@ public class ApplicationUtils {
                 restUtils.sendDeleteCommand(
                         authentificationUtils.finalHost
                                 + urlLoader.actionApplication
-                                + this.getApplication().getName(),
+                                + application.getName(),
                         authentificationUtils.getMap()).get("body");
             } catch (ManagerResponseException e) {
                 statusCommand.setExitStatut(1);
                 return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
             }
-            response = "Your application " + this.getApplication().getName()
+            response = "Your application " + application.getName()
                     + " is currently being removed";
             resetPrompt();
             statusCommand.setExitStatut(0);
-            this.setApplication(null);
+            setApplication(null);
             return response;
         }
 
@@ -209,7 +217,7 @@ public class ApplicationUtils {
             Scanner scanner = new Scanner(System.in);
             log.log(Level.WARNING,
                     "Confirm the suppression of your application : "
-                            + this.getApplication().getName()
+                            + application.getName()
                             + " - (yes/y or no/n)");
             confirmation = scanner.nextLine();
             try {
@@ -222,11 +230,11 @@ public class ApplicationUtils {
                         restUtils.sendDeleteCommand(
                                 authentificationUtils.finalHost
                                         + urlLoader.actionApplication
-                                        + this.getApplication().getName(),
+                                        + application.getName(),
                                 authentificationUtils.getMap()).get("body");
 
                         response = "Your application "
-                                + this.getApplication().getName()
+                                + application.getName()
                                 + " is currently being removed";
                         resetPrompt();
                         statusCommand.setExitStatut(0);
@@ -234,7 +242,7 @@ public class ApplicationUtils {
 
                     case "no":
                     case "n":
-                        this.setApplication(null);
+                        setApplication(null);
                         resetPrompt();
                         statusCommand.setExitStatut(0);
 
@@ -243,7 +251,7 @@ public class ApplicationUtils {
                     default:
 
                         if (loop >= 3) {
-                            this.setApplication(null);
+                            setApplication(null);
                             resetPrompt();
                             loop = 0;
                             scanner.close();
@@ -254,7 +262,7 @@ public class ApplicationUtils {
                         log.log(Level.SEVERE,
                                 "confirmation response are yes/y or no/n ");
                         scanner.close();
-                        return this.rmApp(applicationName, scriptUsage);
+                        return rmApp(applicationName, scriptUsage);
                 }
             } catch (ResourceAccessException e) {
                 statusCommand.setExitStatut(1);
@@ -268,7 +276,7 @@ public class ApplicationUtils {
                 return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
             }
 
-            this.setApplication(null);
+            setApplication(null);
             scanner.close();
             loop = 0;
         }
@@ -285,26 +293,17 @@ public class ApplicationUtils {
             return checkResponse;
         }
 
-        if (applicationName != null) {
-            this.useApplication(applicationName);
-        } else {
-            applicationName = this.getApplication().getName();
-        }
-
         try {
             Map<String, String> parameters = new HashMap<>();
-            parameters.put("applicationName", applicationName);
+            parameters.put("applicationName", application.getName());
             restUtils.sendPostCommand(
                     authentificationUtils.finalHost
                             + urlLoader.actionApplication + urlLoader.start,
                     authentificationUtils.getMap(), parameters).get("body");
-            response = "Your application " + applicationName
+            response = "Your application " + application.getName().toLowerCase()
                     + " is currently being started";
             statusCommand.setExitStatut(0);
 
-        } catch (ResourceAccessException e) {
-            statusCommand.setExitStatut(1);
-            return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
         } catch (ManagerResponseException e) {
             statusCommand.setExitStatut(1);
             return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
@@ -322,15 +321,9 @@ public class ApplicationUtils {
             return checkResponse;
         }
 
-        if (applicationName != null) {
-            this.useApplication(applicationName);
-        } else {
-            applicationName = this.getApplication().getName();
-        }
-
 
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("applicationName", applicationName);
+        parameters.put("applicationName", application.getName());
 
         try {
             restUtils.sendPostCommand(
@@ -341,7 +334,7 @@ public class ApplicationUtils {
             statusCommand.setExitStatut(1);
             return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
         }
-        response = "Your application " + applicationName
+        response = "Your application " + application.getName().toLowerCase()
                 + " is currently being stopped";
         statusCommand.setExitStatut(0);
 
@@ -412,7 +405,7 @@ public class ApplicationUtils {
 
         } else {
             // refresh application informations
-            this.useApplication(this.getApplication().getName());
+            useApplication(application.getName());
 
             try {
                 File file = path;
@@ -426,7 +419,7 @@ public class ApplicationUtils {
                 body = (String) restUtils.sendPostForUpload(
                         authentificationUtils.finalHost
                                 + urlLoader.actionApplication
-                                + this.getApplication().getName() + "/deploy",
+                                + application.getName() + "/deploy",
                         params).get("body");
                 statusCommand.setExitStatut(0);
 
@@ -440,12 +433,12 @@ public class ApplicationUtils {
         }
 
         if (!body.equalsIgnoreCase("") && openBrowser) {
-            DesktopAPI.browse(new URL(this.application.getLocation())
+            DesktopAPI.browse(new URL(application.getLocation())
                     .toURI());
         }
 
         return "War deployed - Access on "
-                + this.application.getLocation();
+                + application.getLocation();
     }
 
     public String addNewAlias(String applicationName, String alias) {
@@ -456,11 +449,6 @@ public class ApplicationUtils {
             return checkResponse;
         }
 
-        if (applicationName != null) {
-            this.useApplication(applicationName);
-        } else {
-            applicationName = this.getApplication().getName();
-        }
 
         Map<String, String> parameters = new HashMap<>();
         parameters.put("applicationName", applicationName);
@@ -490,12 +478,6 @@ public class ApplicationUtils {
             return checkResponse;
         }
 
-        if (applicationName != null) {
-            this.useApplication(applicationName);
-        } else {
-            applicationName = this.getApplication().getName();
-        }
-
 
         try {
             response = restUtils.sendGetCommand(
@@ -523,12 +505,6 @@ public class ApplicationUtils {
         String checkResponse = checkAndRejectIfError(applicationName);
         if (checkResponse != null) {
             return checkResponse;
-        }
-
-        if (applicationName != null) {
-            this.useApplication(applicationName);
-        } else {
-            applicationName = this.getApplication().getName();
         }
 
         try {
@@ -577,12 +553,22 @@ public class ApplicationUtils {
                     + ANSIConstants.ANSI_RESET;
         }
 
-        if (this.getApplication() == null) {
+        if (application == null && applicationName == null) {
             statusCommand.setExitStatut(1);
             return ANSIConstants.ANSI_RED
                     + "No application is currently selected by the following command line : use <application name>"
                     + ANSIConstants.ANSI_RESET;
+
         }
+        String result = "";
+        if (applicationName != null) {
+            log.log(Level.INFO, applicationName);
+            result = useApplication(applicationName);
+            if (result.contains("This application does not exist on this account")) {
+                return result;
+            }
+        }
+
         return null;
     }
 }
