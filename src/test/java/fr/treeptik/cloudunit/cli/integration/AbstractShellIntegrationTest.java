@@ -1,9 +1,7 @@
 package fr.treeptik.cloudunit.cli.integration;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.springframework.shell.Bootstrap;
 import org.springframework.shell.core.JLineShellComponent;
 
