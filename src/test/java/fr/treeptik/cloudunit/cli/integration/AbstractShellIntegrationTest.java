@@ -12,8 +12,12 @@ public class AbstractShellIntegrationTest {
 
     private static JLineShellComponent shell;
 
+    public static JLineShellComponent getShell() {
+        return shell;
+    }
+
     @Before
-    public  void startUp() throws InterruptedException {
+    public void startUp() throws InterruptedException {
         Bootstrap bootstrap = new Bootstrap();
         shell = bootstrap.getJLineShellComponent();
     }
@@ -21,10 +25,6 @@ public class AbstractShellIntegrationTest {
     @After
     public void shutdown() {
         shell.stop();
-    }
-
-    public static JLineShellComponent getShell() {
-        return shell;
     }
 
 

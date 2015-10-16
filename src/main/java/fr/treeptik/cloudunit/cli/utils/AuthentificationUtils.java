@@ -15,22 +15,21 @@
 
 package fr.treeptik.cloudunit.cli.utils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import fr.treeptik.cloudunit.cli.commands.ShellStatusCommand;
+import fr.treeptik.cloudunit.cli.exception.ManagerResponseException;
+import fr.treeptik.cloudunit.cli.processor.InjectLogger;
+import fr.treeptik.cloudunit.cli.rest.RestUtils;
 import fr.treeptik.cloudunit.cli.shell.CloudUnitPromptProvider;
-
 import jline.console.ConsoleReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.ResourceAccessException;
 
-import fr.treeptik.cloudunit.cli.commands.ShellStatusCommand;
-import fr.treeptik.cloudunit.cli.processor.InjectLogger;
-import fr.treeptik.cloudunit.cli.rest.RestUtils;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class AuthentificationUtils {
@@ -73,10 +72,9 @@ public class AuthentificationUtils {
         }
 
         if (fileUtils.isInFileExplorer()) {
-            log.log(Level.SEVERE,
-                    "You are currently in a container file explorer. Please exit it with close-explorer command");
             statusCommand.setExitStatut(1);
-            return null;
+            return (ANSIConstants.ANSI_RED + "You are currently in a container file explorer. Please exit it with close-explorer command" + ANSIConstants.ANSI_RESET);
+
         }
 
         try {
@@ -84,8 +82,12 @@ public class AuthentificationUtils {
 
             if (password.equalsIgnoreCase("")) {
                 log.log(Level.INFO, "Enter your password : ");
-                password = new ConsoleReader()
-                        .readLine(new Character('*'));
+                try {
+                    password = new ConsoleReader()
+                            .readLine(new Character('*'));
+                } catch (IOException e) {
+                    return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
+                }
             }
             Map<String, Object> loginInfo = new HashMap<>();
             loginInfo.put("login", login);
@@ -108,18 +110,14 @@ public class AuthentificationUtils {
             restUtils.connect(urlToCall, loginInfo).get("body");
             applicationUtils.setApplication(null);
             resetPrompt();
-            statusCommand.setExitStatut(0);
 
-        } catch (ResourceAccessException e) {
-            log.log(Level.SEVERE,
-                    "The CLI can't etablished connection with host servers. Please try later or contact a");
+
+        } catch (ManagerResponseException e) {
             statusCommand.setExitStatut(1);
-            return null;
-        } catch (Exception e) {
             if (loop >= 3) {
-                return null;
+                return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
             }
-            statusCommand.setExitStatut(1);
+
             password = "";
             return this.connect(login, password, selectedHost);
         }
@@ -128,7 +126,12 @@ public class AuthentificationUtils {
         map.put("password", password);
         loop = 0;
 
-        Boolean checkingAPI = this.checkAPIVersion(finalHost);
+        try {
+            Boolean checkingAPI = this.checkAPIVersion(finalHost);
+        } catch (ManagerResponseException e) {
+            statusCommand.setExitStatut(1);
+            return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
+        }
 
         // Test if connection was successful
         /*
@@ -145,14 +148,14 @@ public class AuthentificationUtils {
 			return null;
 		}
 		*/
+        statusCommand.setExitStatut(0);
         return "Connection established";
 
     }
 
-    private Boolean checkAPIVersion(String host) {
+    private Boolean checkAPIVersion(String host) throws ManagerResponseException {
         String response = restUtils.sendGetCommand(
                 host + urlLoader.imageFind + "/version", map).get("body");
-
         if (response == null)
             return null;
         if (response.equalsIgnoreCase(apiVersion))
@@ -165,15 +168,24 @@ public class AuthentificationUtils {
      */
     public String disconnect() {
         if (fileUtils.isInFileExplorer()) {
-            log.log(Level.SEVERE,
-                    "You are currently in a container file explorer. Please exit it with close-explorer command");
+
             statusCommand.setExitStatut(1);
-            return null;
+            return ANSIConstants.ANSI_RED
+                    + "You are currently in a container file explorer. Please exit it with close-explorer command"
+                    + ANSIConstants.ANSI_RESET;
         }
-        restUtils.sendGetCommand(finalHost + "/user/logout", map);
+        try {
+            restUtils.sendGetCommand(finalHost + "/user/logout", map);
+            map.clear();
+            applicationUtils.setApplication(null);
+            restUtils.localContext = null;
+        } catch (ManagerResponseException e) {
+            return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
+        }
         resetPrompt();
 
-        return null;
+        return "Disconnect";
+
     }
 
     public Map<String, Object> getMap() {

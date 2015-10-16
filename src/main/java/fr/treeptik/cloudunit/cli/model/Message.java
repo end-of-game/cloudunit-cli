@@ -15,11 +15,11 @@
 
 package fr.treeptik.cloudunit.cli.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class Message implements Serializable {
 

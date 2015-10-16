@@ -15,10 +15,10 @@
 
 package fr.treeptik.cloudunit.cli.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.List;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 public class Image implements Serializable {
 

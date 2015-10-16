@@ -15,7 +15,7 @@
 
 package fr.treeptik.cloudunit.cli.utils;
 
-import static java.lang.System.out;
+import fr.treeptik.cloudunit.cli.model.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,15 +23,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import fr.treeptik.cloudunit.cli.model.Application;
-import fr.treeptik.cloudunit.cli.model.ContainerUnit;
-import fr.treeptik.cloudunit.cli.model.FileUnit;
-import fr.treeptik.cloudunit.cli.model.Image;
-import fr.treeptik.cloudunit.cli.model.Message;
-import fr.treeptik.cloudunit.cli.model.Module;
-import fr.treeptik.cloudunit.cli.model.Server;
-import fr.treeptik.cloudunit.cli.model.Snapshot;
-import fr.treeptik.cloudunit.cli.model.User;
+import static java.lang.System.out;
 
 public class MessageConverter {
 

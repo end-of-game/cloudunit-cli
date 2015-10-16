@@ -15,27 +15,14 @@
 
 package fr.treeptik.cloudunit.cli.rest;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.apache.commons.io.IOUtils;
+import fr.treeptik.cloudunit.cli.exception.CustomResponseErrorHandler;
+import fr.treeptik.cloudunit.cli.exception.ManagerResponseException;
+import fr.treeptik.cloudunit.cli.utils.AuthentificationUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.*;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
@@ -44,24 +31,22 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.DefaultResponseErrorHandler;
-import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
-import fr.treeptik.cloudunit.cli.exception.CustomResponseErrorHandler;
-import fr.treeptik.cloudunit.cli.model.JsonResponseError;
-import fr.treeptik.cloudunit.cli.utils.AuthentificationUtils;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 @Component
 public class RestUtils {
@@ -72,7 +57,7 @@ public class RestUtils {
     private AuthentificationUtils authentificationUtils;
 
     public Map<String, String> connect(String url,
-                                       Map<String, Object> parameters) {
+                                       Map<String, Object> parameters) throws ManagerResponseException {
 
         Map<String, String> response = new HashMap<String, String>();
         CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -95,6 +80,7 @@ public class RestUtils {
             httpResponse.close();
         } catch (Exception e) {
             authentificationUtils.getMap().clear();
+            throw new ManagerResponseException(e.getMessage(), e);
         }
 
         return response;
@@ -108,7 +94,7 @@ public class RestUtils {
      * @return
      */
     public Map<String, String> sendGetCommand(String url,
-                                              Map<String, Object> parameters) {
+                                              Map<String, Object> parameters) throws ManagerResponseException {
         Map<String, String> response = new HashMap<String, String>();
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpGet httpget = new HttpGet(url);
@@ -121,14 +107,14 @@ public class RestUtils {
             httpResponse.close();
 
         } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            throw new ManagerResponseException(e.getMessage(), e);
         }
 
         return response;
     }
 
     public Map<String, String> sendGetFileCommand(String url, String filePath,
-                                                  Map<String, Object> parameters) {
+                                                  Map<String, Object> parameters) throws ManagerResponseException {
         Map<String, String> response = new HashMap<String, String>();
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpGet httpget = new HttpGet(url);
@@ -145,7 +131,7 @@ public class RestUtils {
             httpResponse.close();
 
         } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            throw new ManagerResponseException(e.getMessage(), e);
         }
 
         return response;
@@ -158,7 +144,7 @@ public class RestUtils {
      * @return
      */
     public Map<String, String> sendDeleteCommand(String url,
-                                                 Map<String, Object> credentials) {
+                                                 Map<String, Object> credentials) throws ManagerResponseException {
         Map<String, String> response = new HashMap<String, String>();
         CloseableHttpClient httpclient = HttpClients.createDefault();
 
@@ -171,7 +157,7 @@ public class RestUtils {
             response.put("body", body);
             httpResponse.close();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            throw new ManagerResponseException(e.getMessage(), e);
         }
 
         return response;
@@ -187,14 +173,13 @@ public class RestUtils {
      */
     public Map<String, Object> sendPostCommand(String url,
                                                Map<String, Object> credentials, Map<String, String> parameters)
-            throws ClientProtocolException {
+            throws ManagerResponseException {
         Map<String, Object> response = new HashMap<String, Object>();
         CloseableHttpClient httpclient = HttpClients.createDefault();
 
         HttpPost httpPost = new HttpPost(url);
         httpPost.setHeader("Accept", "application/json");
         httpPost.setHeader("Content-type", "application/json");
-
         try {
             ObjectMapper mapper = new ObjectMapper();
             StringEntity entity = new StringEntity(
@@ -207,8 +192,7 @@ public class RestUtils {
             response.put("body", body);
             httpResponse.close();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
-            throw new ClientProtocolException();
+            throw new ManagerResponseException(e.getMessage(), e);
         }
 
         return response;
@@ -224,7 +208,7 @@ public class RestUtils {
      */
     public Map<String, Object> sendPutCommand(String url,
                                               Map<String, Object> credentials, Map<String, String> parameters)
-            throws ClientProtocolException {
+            throws ManagerResponseException {
         Map<String, Object> response = new HashMap<String, Object>();
         CloseableHttpClient httpclient = HttpClients.createDefault();
 
@@ -244,8 +228,7 @@ public class RestUtils {
             response.put("body", body);
             httpResponse.close();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
-            throw new ClientProtocolException();
+            throw new ManagerResponseException(e.getMessage(), e);
         }
 
         return response;
@@ -264,7 +247,6 @@ public class RestUtils {
         RestTemplate restTemplate = new RestTemplate();
         List<HttpMessageConverter<?>> mc = restTemplate.getMessageConverters();
         mc.add(new MappingJacksonHttpMessageConverter());
-        restTemplate.setErrorHandler(new CustomResponseErrorHandlerForUpload());
         restTemplate.setMessageConverters(mc);
         MultiValueMap<String, Object> postParams = new LinkedMultiValueMap<String, Object>();
         postParams.setAll(parameters);
@@ -286,22 +268,7 @@ public class RestUtils {
         response.put("body", body);
 
         return response;
-    }
 
-    private class CustomResponseErrorHandlerForUpload implements
-            ResponseErrorHandler {
-
-        private ResponseErrorHandler errorHandler = new DefaultResponseErrorHandler();
-
-        public boolean hasError(ClientHttpResponse response) throws IOException {
-            return errorHandler.hasError(response);
-        }
-
-        public void handleError(ClientHttpResponse response) throws IOException {
-            String body = IOUtils.toString(response.getBody());
-            JsonResponseError error = JsonConverter.getError(body);
-            logger.log(Level.SEVERE, error.getMessage());
-        }
 
     }
 }

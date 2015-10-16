@@ -15,11 +15,11 @@
 
 package fr.treeptik.cloudunit.cli.utils;
 
-import static java.lang.String.format;
-
 import java.io.PrintStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.lang.String.format;
 
 public final class ShellRowFormater {
 

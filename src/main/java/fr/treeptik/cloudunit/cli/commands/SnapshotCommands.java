@@ -14,14 +14,13 @@
  */
 package fr.treeptik.cloudunit.cli.commands;
 
+import fr.treeptik.cloudunit.cli.utils.AuthentificationUtils;
+import fr.treeptik.cloudunit.cli.utils.SnapshotUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliCommand;
 import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
-
-import fr.treeptik.cloudunit.cli.utils.AuthentificationUtils;
-import fr.treeptik.cloudunit.cli.utils.SnapshotUtils;
 
 @Component
 public class SnapshotCommands implements CommandMarker {
@@ -47,8 +46,7 @@ public class SnapshotCommands implements CommandMarker {
 
     @CliCommand(value = "list-snapshot", help = "Create a new snapshot for the current application")
     public String listSnapshot() {
-        snapshotUtils.listAllSnapshots();
-        return "";
+        return snapshotUtils.listAllSnapshots();
     }
 
     @CliCommand(value = "clone", help = "Create a new app from a previous image")

@@ -15,22 +15,21 @@
 
 package fr.treeptik.cloudunit.cli.utils;
 
+import fr.treeptik.cloudunit.cli.commands.ShellStatusCommand;
+import fr.treeptik.cloudunit.cli.exception.ManagerResponseException;
+import fr.treeptik.cloudunit.cli.processor.InjectLogger;
+import fr.treeptik.cloudunit.cli.rest.RestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.shell.core.CommandMarker;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.ResourceAccessException;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.apache.http.client.ClientProtocolException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.shell.core.CommandMarker;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.ResourceAccessException;
-
-import fr.treeptik.cloudunit.cli.commands.ShellStatusCommand;
-import fr.treeptik.cloudunit.cli.processor.InjectLogger;
-import fr.treeptik.cloudunit.cli.rest.RestUtils;
 
 @Component
 public class ServerUtils
@@ -61,34 +60,10 @@ public class ServerUtils
      * @return
      */
     public String changeMemory(String memory) {
-
-        // workaround spring shell
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        String checkResponse = applicationUtils.checkAndRejectIfError(null);
+        if (checkResponse != null) {
+            return checkResponse;
         }
-
-        if (authentificationUtils.getMap().isEmpty()) {
-            log.log(Level.SEVERE, "You are not connected to CloudUnit host! Please use connect command");
-            statusCommand.setExitStatut(1);
-            return null;
-        }
-
-        if (fileUtils.isInFileExplorer()) {
-            log.log(Level.SEVERE,
-                    "You are currently in a container file explorer. Please exit it with close-explorer command");
-            statusCommand.setExitStatut(1);
-            return null;
-        }
-        if (applicationUtils.getApplication() == null) {
-            log.log(Level.SEVERE,
-                    "No application is currently selected by the followind command line : use <application name>");
-            statusCommand.setExitStatut(1);
-            return null;
-        }
-        // Checking if memory value is authorized
-
         List<String> values = Arrays.asList("512", "1024", "2048", "3072");
         if (!values.contains(memory)) {
             log.log(Level.SEVERE, "The memory value you have put is not authorized (512, 1024, 2048, 3072)");
@@ -130,29 +105,9 @@ public class ServerUtils
      */
     public String addOpts(String opts) {
 
-        // workaround spring shell
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        if (authentificationUtils.getMap().isEmpty()) {
-            log.log(Level.SEVERE, "You are not connected to CloudUnit host! Please use connect command");
-            statusCommand.setExitStatut(1);
-            return null;
-        }
-        if (fileUtils.isInFileExplorer()) {
-            log.log(Level.SEVERE,
-                    "You are currently in a container file explorer. Please exit it with close-explorer command");
-            statusCommand.setExitStatut(1);
-            return null;
-        }
-        if (applicationUtils.getApplication() == null) {
-            log.log(Level.SEVERE,
-                    "No application is currently selected by the followind command line : use <application name>");
-            statusCommand.setExitStatut(1);
-            return null;
+        String checkResponse = applicationUtils.checkAndRejectIfError(null);
+        if (checkResponse != null) {
+            return checkResponse;
         }
 
         try {
@@ -189,22 +144,9 @@ public class ServerUtils
      */
     public String changeJavaVersion(String applicationName, String jvmRelease) {
 
-        if (authentificationUtils.getMap().isEmpty()) {
-            log.log(Level.SEVERE, "You are not connected to CloudUnit host! Please use connect command");
-            statusCommand.setExitStatut(1);
-            return null;
-        }
-        if (fileUtils.isInFileExplorer()) {
-            log.log(Level.SEVERE,
-                    "You are currently in a container file explorer. Please exit it with close-explorer command");
-            statusCommand.setExitStatut(1);
-            return null;
-        }
-        if (applicationUtils.getApplication() == null && applicationName == null) {
-            log.log(Level.SEVERE,
-                    "No application is currently selected by the following command line : use <application name>  ");
-            statusCommand.setExitStatut(1);
-            return null;
+        String checkResponse = applicationUtils.checkAndRejectIfError(applicationName);
+        if (checkResponse != null) {
+            return checkResponse;
         }
 
         if (applicationName != null) {
@@ -219,28 +161,23 @@ public class ServerUtils
             return null;
         }
 
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("applicationName", applicationName);
+        parameters.put("jvmRelease", jvmRelease);
+        parameters.put("jvmMemory",
+                applicationUtils.getApplication().getServers().get(0).getJvmMemory().toString());
+        parameters.put("jvmOptions",
+                applicationUtils.getApplication().getServers().get(0).getJvmOptions().toString());
         try {
-            Map<String, String> parameters = new HashMap<>();
-            parameters.put("applicationName", applicationName);
-            parameters.put("jvmRelease", jvmRelease);
-            parameters.put("jvmMemory",
-                    applicationUtils.getApplication().getServers().get(0).getJvmMemory().toString());
-            parameters.put("jvmOptions",
-                    applicationUtils.getApplication().getServers().get(0).getJvmOptions().toString());
             restUtils.sendPutCommand(authentificationUtils.finalHost + "/server/configuration/jvm",
                     authentificationUtils.getMap(), parameters).get("body");
-            log.log(Level.INFO, "Your java version has been successfully changed");
-            applicationUtils.useApplication(applicationName);
-            statusCommand.setExitStatut(0);
-
-        } catch (ResourceAccessException e) {
-            log.log(Level.SEVERE,
-                    "The CLI can't etablished connexion with host servers. Please try later or contact an admin");
-            statusCommand.setExitStatut(1);
-            return null;
-        } catch (ClientProtocolException e) {
-
+        } catch (ManagerResponseException e) {
+            e.printStackTrace();
         }
+        log.log(Level.INFO, "Your java version has been successfully changed");
+        applicationUtils.useApplication(applicationName);
+        statusCommand.setExitStatut(0);
+
 
         return null;
     }
@@ -264,22 +201,9 @@ public class ServerUtils
             return null;
         }
 
-        if (authentificationUtils.getMap().isEmpty()) {
-            log.log(Level.SEVERE, "You are not connected to CloudUnit host! Please use connect command");
-            statusCommand.setExitStatut(1);
-            return null;
-        }
-        if (fileUtils.isInFileExplorer()) {
-            log.log(Level.SEVERE,
-                    "You are currently in a container file explorer. Please exit it with close-explorer command");
-            statusCommand.setExitStatut(1);
-            return null;
-        }
-        if (applicationUtils.getApplication() == null && applicationName == null) {
-            log.log(Level.SEVERE,
-                    "No application is currently selected by the following command line : use <application name>  ");
-            statusCommand.setExitStatut(1);
-            return null;
+        String checkResponse = applicationUtils.checkAndRejectIfError(applicationName);
+        if (checkResponse != null) {
+            return checkResponse;
         }
 
         if (applicationName != null) {
@@ -293,25 +217,20 @@ public class ServerUtils
             return null;
         }
 
-        try {
-            Map<String, String> parameters = new HashMap<>();
-            parameters.put("applicationName", applicationName);
-            parameters.put("portToOpen", portToOpen);
-            parameters.put("alias", alias);
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("applicationName", applicationName);
+        parameters.put("portToOpen", portToOpen);
+        parameters.put("alias", alias);
 
+        try {
             restUtils.sendPostCommand(authentificationUtils.finalHost + "/server/ports/open",
                     authentificationUtils.getMap(), parameters).get("body");
-            log.log(Level.INFO, "The port " + portToOpen + " was been successfully opened on " + applicationName);
-            statusCommand.setExitStatut(0);
-
-        } catch (ResourceAccessException e) {
-            log.log(Level.SEVERE,
-                    "The CLI can't etablished connexion with host servers. Please try later or contact an admin");
-            statusCommand.setExitStatut(1);
-            return null;
-        } catch (ClientProtocolException e) {
-
+        } catch (ManagerResponseException e) {
+            e.printStackTrace();
         }
+        log.log(Level.INFO, "The port " + portToOpen + " was been successfully opened on " + applicationName);
+        statusCommand.setExitStatut(0);
+
 
         return null;
     }
