@@ -451,7 +451,7 @@ public class ApplicationUtils {
 
 
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("applicationName", applicationName);
+        parameters.put("applicationName", application.getName());
         parameters.put("alias", alias);
         try {
             restUtils.sendPostCommand(
@@ -464,7 +464,7 @@ public class ApplicationUtils {
         }
         statusCommand.setExitStatut(0);
         response = "Your alias " + alias
-                + " has been successfully added to " + applicationName;
+                + " has been successfully added to " + application.getName();
 
 
         return response;

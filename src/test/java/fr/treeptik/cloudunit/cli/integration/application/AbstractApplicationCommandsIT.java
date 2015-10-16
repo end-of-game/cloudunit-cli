@@ -18,7 +18,6 @@ public abstract class AbstractApplicationCommandsIT extends AbstractShellIntegra
 
     private static String applicationName;
     protected String serverType;
-    private CommandResult cr;
 
     @BeforeClass
     public static void generateApplicationName() {
