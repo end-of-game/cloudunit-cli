@@ -33,12 +33,22 @@ public abstract class AbstractAliasesCommandsIT extends AbstractShellIntegration
         cr = getShell().executeCommand("use " + applicationName);
         cr = getShell().executeCommand("add-alias --alias " + alias);
         String result = cr.getResult().toString();
-        String expectedResult = "Your alias myalias has been successfully added to " + applicationName.toLowerCase();
+        String expectedResult = "An alias has been successfully added to " + applicationName.toLowerCase();
         Assert.assertEquals(expectedResult, result);
     }
 
     @Test
-    public void test01_shouldNotAddAnAliasBecauseApplicationNotSelected() {
+    public void test01_shoulAliasRemovingForbiddenExpression() {
+        CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
+        cr = getShell().executeCommand("use " + applicationName);
+        cr = getShell().executeCommand("add-alias --alias https://" + alias+"a");
+        String result = cr.getResult().toString();
+        String expectedResult = "An alias has been successfully added to " + applicationName.toLowerCase();
+        Assert.assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void test02_shouldNotAddAnAliasBecauseApplicationNotSelected() {
         CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
         cr = getShell().executeCommand("add-alias --alias " + alias);
         String result = cr.getResult().toString();
@@ -47,12 +57,31 @@ public abstract class AbstractAliasesCommandsIT extends AbstractShellIntegration
     }
 
     @Test
-    public void test02_shouldNotAddAnAliasBecauseUserIsNotLogged() {
+    public void test03_shouldNotAddAnAliasBecauseUserIsNotLogged() {
         CommandResult cr = getShell().executeCommand("use " + applicationName);
         cr = getShell().executeCommand("add-alias --alias " + alias);
         String result = cr.getResult().toString();
         String expectedResult = "You are not connected to CloudUnit host! Please use connect command";
         Assert.assertTrue(result.contains(expectedResult));
+    }
+
+    @Test
+    public void test10_shoudListAlias() {
+        CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
+        cr = getShell().executeCommand("use " + applicationName);
+        cr = getShell().executeCommand("list-aliases");
+        String result = cr.getResult().toString();
+        String expectedResult = "2 aliases found!";
+        Assert.assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void test11_shoudListAliasWithArgs() {
+        CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
+        cr = getShell().executeCommand("list-aliases --name " + applicationName);
+        String result = cr.getResult().toString();
+        String expectedResult = "2 aliases found!";
+        Assert.assertEquals(expectedResult, result);
     }
 
 

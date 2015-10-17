@@ -38,7 +38,7 @@ public class ApplicationCommands
     private ApplicationUtils applicationUtils;
 
 
-    @CliCommand(value = "informations", help = "Show informations about the current application")
+    @CliCommand(value = "informations", help = "Display informations about the current application")
     public String getApplication() {
         return applicationUtils.getInformations();
     }
@@ -86,7 +86,7 @@ public class ApplicationCommands
         return "Check your syntax and option chosen and it's the right path";
     }
 
-    @CliCommand(value = "list-aliases", help = "Show all application aliases")
+    @CliCommand(value = "list-aliases", help = "Display all application aliases")
     public String listAlias(@CliOption(key = {"", "name"}, mandatory = false, help = "Application name") String applicationName) {
         return applicationUtils.listAllAliases(applicationName);
     }

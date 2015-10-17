@@ -41,7 +41,7 @@ public class ModuleCommands implements CommandMarker {
         return moduleUtils.removeModule(moduleName);
     }
 
-    @CliCommand(value = "show-modules", help = "Show informations about all modules of the current application")
+    @CliCommand(value = "display-modules", help = "Display informations about all modules of the current application")
     public String getApplication() {
         return moduleUtils.getListModules();
     }

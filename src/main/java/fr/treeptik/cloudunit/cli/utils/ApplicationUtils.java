@@ -225,8 +225,6 @@ public class ApplicationUtils {
                 switch (confirmation.toLowerCase()) {
                     case "yes":
                     case "y":
-
-
                         restUtils.sendDeleteCommand(
                                 authentificationUtils.finalHost
                                         + urlLoader.actionApplication
@@ -463,8 +461,7 @@ public class ApplicationUtils {
             return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
         }
         statusCommand.setExitStatut(0);
-        response = "Your alias " + alias
-                + " has been successfully added to " + application.getName();
+        response = "An alias has been successfully added to " + application.getName();
 
 
         return response;
@@ -482,7 +479,7 @@ public class ApplicationUtils {
         try {
             response = restUtils.sendGetCommand(
                     authentificationUtils.finalHost
-                            + urlLoader.actionApplication + applicationName
+                            + urlLoader.actionApplication + application.getName()
                             + "/alias", authentificationUtils.getMap()).get(
                     "body");
         } catch (ManagerResponseException e) {
@@ -513,7 +510,7 @@ public class ApplicationUtils {
                     .sendDeleteCommand(
                             authentificationUtils.finalHost
                                     + urlLoader.actionApplication
-                                    + applicationName + "/alias/" + alias,
+                                    + application.getName() + "/alias/" + alias,
                             authentificationUtils.getMap()).get("body");
         } catch (ManagerResponseException e) {
             statusCommand.setExitStatut(1);
