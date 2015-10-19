@@ -39,19 +39,20 @@ public class CustomResponseErrorHandler implements ResponseHandler<String> {
             HttpEntity entity = response.getEntity();
             return entity != null ? EntityUtils.toString(entity) : null;
         } else {
-            InputStreamReader reader = null;
-            reader = new InputStreamReader(response.getEntity()
-                    .getContent());
-            LineIterator lineIterator = new LineIterator(reader);
-            StringBuilder jsonStringBuilder = new StringBuilder();
 
-            while (lineIterator.hasNext()) {
-                jsonStringBuilder.append(lineIterator.nextLine());
-            }
-            JsonResponseError error = JsonConverter
-                    .getError(jsonStringBuilder.toString());
             switch (status) {
                 case 500:
+                    InputStreamReader reader = null;
+                    reader = new InputStreamReader(response.getEntity()
+                            .getContent());
+                    LineIterator lineIterator = new LineIterator(reader);
+                    StringBuilder jsonStringBuilder = new StringBuilder();
+
+                    while (lineIterator.hasNext()) {
+                        jsonStringBuilder.append(lineIterator.nextLine());
+                    }
+                    JsonResponseError error = JsonConverter
+                            .getError(jsonStringBuilder.toString());
                     throw new ClientProtocolException(error.getMessage());
                 case 401:
                     throw new ClientProtocolException(
@@ -60,10 +61,32 @@ public class CustomResponseErrorHandler implements ResponseHandler<String> {
                     throw new ClientProtocolException(
                             "Status 403 - You must be an admin to execute this command!");
                 case 404:
+                    reader = null;
+                    reader = new InputStreamReader(response.getEntity()
+                            .getContent());
+                    lineIterator = new LineIterator(reader);
+                    jsonStringBuilder = new StringBuilder();
+
+                    while (lineIterator.hasNext()) {
+                        jsonStringBuilder.append(lineIterator.nextLine());
+                    }
+                    error = JsonConverter
+                            .getError(jsonStringBuilder.toString());
                     throw new ClientProtocolException(error.getMessage());
                 default:
-                    throw new ClientProtocolException(
-                            error.getMessage());
+                    reader = null;
+                    reader = new InputStreamReader(response.getEntity()
+                            .getContent());
+                    lineIterator = new LineIterator(reader);
+                    jsonStringBuilder = new StringBuilder();
+
+                    while (lineIterator.hasNext()) {
+                        jsonStringBuilder.append(lineIterator.nextLine());
+                    }
+                    error = JsonConverter
+                            .getError(jsonStringBuilder.toString());
+                    throw new ClientProtocolException(error.getMessage()
+                    );
             }
         }
 

@@ -98,7 +98,7 @@ public class ApplicationCommands
     }
 
     @CliCommand(value = "rm-alias", help = "Remove an existing alias")
-    public String rmAlias(@CliOption(key = {""}, mandatory = false, help = "Application name") String applicationName,
+    public String rmAlias(@CliOption(key = {"", "name"}, mandatory = false, help = "Application name") String applicationName,
                           @CliOption(key = {"alias"}, mandatory = true, help = "Alias to access to your apps") String alias) {
         return applicationUtils.removeAlias(applicationName, alias);
     }

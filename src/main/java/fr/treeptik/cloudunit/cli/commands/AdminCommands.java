@@ -27,7 +27,7 @@ public class AdminCommands implements CommandMarker {
     @Autowired
     private AdminUtils adminUtils;
 
-    @CliCommand(value = "su-show-users", help = "Show all users")
+    @CliCommand(value = "su-display-users", help = "Display all users")
     public String getAllUsers() {
         return adminUtils.listUsers();
     }
