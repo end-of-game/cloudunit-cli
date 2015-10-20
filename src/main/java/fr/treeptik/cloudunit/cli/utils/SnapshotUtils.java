@@ -27,7 +27,6 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Component
@@ -83,10 +82,19 @@ public class SnapshotUtils {
 
     public String deleteSnapshot(String tag) {
 
-        String checkResponse = applicationUtils.checkAndRejectIfError(null);
-        if (checkResponse != null) {
-            return checkResponse;
+        if (authentificationUtils.getMap().isEmpty()) {
+            statusCommand.setExitStatut(1);
+            return ANSIConstants.ANSI_RED
+                    + "You are not connected to CloudUnit host! Please use connect command"
+                    + ANSIConstants.ANSI_RESET;
         }
+        if (fileUtils.isInFileExplorer()) {
+            statusCommand.setExitStatut(1);
+            return ANSIConstants.ANSI_RED
+                    + "You are currently in a container file explorer. Please exit it with close-explorer command"
+                    + ANSIConstants.ANSI_RESET;
+        }
+
         try {
             restUtils.sendDeleteCommand(
                     authentificationUtils.finalHost + "/snapshot/" + tag,
@@ -96,20 +104,27 @@ public class SnapshotUtils {
             return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
         }
 
-
-        log.log(Level.INFO, "The snapshot " + tag
-                + " was successfully deleted.");
-        return null;
+        return "The snapshot " + tag
+                + " was successfully deleted.";
     }
 
     public String listAllSnapshots() {
         List<Snapshot> listSnapshots;
         String json = null;
-        String checkResponse = applicationUtils.checkAndRejectIfError(null);
-        if (checkResponse != null) {
-            return checkResponse;
+
+        if (authentificationUtils.getMap().isEmpty()) {
+            statusCommand.setExitStatut(1);
+            return ANSIConstants.ANSI_RED
+                    + "You are not connected to CloudUnit host! Please use connect command"
+                    + ANSIConstants.ANSI_RESET;
         }
 
+        if (fileUtils.isInFileExplorer()) {
+            statusCommand.setExitStatut(1);
+            return ANSIConstants.ANSI_RED
+                    + "You are currently in a container file explorer. Please exit it with close-explorer command"
+                    + ANSIConstants.ANSI_RESET;
+        }
         try {
             json = (String) restUtils.sendGetCommand(
                     authentificationUtils.finalHost + "/snapshot/list",
@@ -126,9 +141,17 @@ public class SnapshotUtils {
     }
 
     public String clone(String applicationName, String tag) {
-        String checkResponse = applicationUtils.checkAndRejectIfError(applicationName);
-        if (checkResponse != null) {
-            return checkResponse;
+        if (authentificationUtils.getMap().isEmpty()) {
+            statusCommand.setExitStatut(1);
+            return ANSIConstants.ANSI_RED
+                    + "You are not connected to CloudUnit host! Please use connect command"
+                    + ANSIConstants.ANSI_RESET;
+        }
+        if (fileUtils.isInFileExplorer()) {
+            statusCommand.setExitStatut(1);
+            return ANSIConstants.ANSI_RED
+                    + "You are currently in a container file explorer. Please exit it with close-explorer command"
+                    + ANSIConstants.ANSI_RESET;
         }
 
         Map<String, String> parameters = new HashMap<>();

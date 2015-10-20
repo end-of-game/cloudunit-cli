@@ -90,6 +90,47 @@ public abstract class AbstractModuleCommandsIT extends AbstractShellIntegrationT
         addAndRemoveModule("mongo-2-6");
     }
 
+    @Test
+    public void test20_shouldListModules() {
+        CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
+        cr = getShell().executeCommand("create-app --name " + applicationName + " --type " + serverType);
+        cr = getShell().executeCommand("use " + applicationName);
+        cr = getShell().executeCommand("add-module --name mysql-5-5");
+        String result = cr.getResult().toString();
+        String expectedResult = "Your module mysql-5-5 is currently being added to your application " + applicationName.toLowerCase();
+        Assert.assertEquals(expectedResult, result);
+
+        cr = getShell().executeCommand("display-modules");
+        result = cr.getResult().toString();
+        expectedResult = "2 modules found";
+        Assert.assertEquals(expectedResult, result);
+
+
+        cr = getShell().executeCommand("rm-app --name " + applicationName + " --scriptUsage");
+        result = cr.getResult().toString();
+        expectedResult = "Your application " + applicationName.toLowerCase() + " is currently being removed";
+        Assert.assertEquals(expectedResult, result);
+    }
+
+
+    @Test
+    public void test21_shouldNotListModulesBecauseApplicationNotSelected() {
+        CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
+        cr = getShell().executeCommand("display-modules");
+        String result = cr.getResult().toString();
+        String expectedResult = "No application is currently selected by the following command line : use <application name>";
+        Assert.assertTrue(result.contains(expectedResult));
+
+    }
+
+    @Test
+    public void test22_shouldNotListModulesBecauseUserIsNotLogged() {
+        CommandResult cr = getShell().executeCommand("display-modules");
+        String result = cr.getResult().toString();
+        String expectedResult = "You are not connected to CloudUnit host! Please use connect command";
+        Assert.assertTrue(result.contains(expectedResult));
+    }
+
 
     private void addModule(String moduleName) {
         CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
