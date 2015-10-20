@@ -74,6 +74,7 @@ public abstract class AbstractModuleCommandsIT extends AbstractShellIntegrationT
 
     }
 
+
     @Test
     public void test10_shoudAddAndRemoveMysqlModule() {
         addAndRemoveModule("mysql-5-5");
@@ -115,8 +116,8 @@ public abstract class AbstractModuleCommandsIT extends AbstractShellIntegrationT
         Assert.assertEquals(expectedResult, result);
         cr = getShell().executeCommand("rm-module --name " + moduleName + "-1");
         result = cr.getResult().toString();
-        expectedResult = "Your module " + moduleName
-                + " is currently being removed from your application " + applicationName;
+        expectedResult = "Your module " + moduleName + "-1"
+                + " is currently being removed from your application " + applicationName.toLowerCase();
         Assert.assertEquals(expectedResult, result);
         cr = getShell().executeCommand("rm-app --name " + applicationName + " --scriptUsage");
         result = cr.getResult().toString();

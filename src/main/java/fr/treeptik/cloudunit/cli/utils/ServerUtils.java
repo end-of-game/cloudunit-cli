@@ -22,7 +22,6 @@ import fr.treeptik.cloudunit.cli.rest.RestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.ResourceAccessException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -55,6 +54,8 @@ public class ServerUtils
 
     private List<String> availableJavaVersion = Arrays.asList(new String[]{"jdk1.7.0_55", "jdk1.8.0_25"});
 
+    private List<String> availableMemoryValues = Arrays.asList("512", "1024", "2048", "3072");
+
     /**
      * @param memory
      * @return
@@ -64,36 +65,30 @@ public class ServerUtils
         if (checkResponse != null) {
             return checkResponse;
         }
-        List<String> values = Arrays.asList("512", "1024", "2048", "3072");
-        if (!values.contains(memory)) {
-            log.log(Level.SEVERE, "The memory value you have put is not authorized (512, 1024, 2048, 3072)");
+
+        if (!availableMemoryValues.contains(memory)) {
             statusCommand.setExitStatut(1);
-            return null;
+            return ANSIConstants.ANSI_RED + "The memory value you have put is not authorized (512, 1024, 2048, 3072)" + ANSIConstants.ANSI_RESET;
         }
 
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("applicationName", applicationUtils.getApplication().getName());
+        parameters.put("jvmMemory", memory);
+        parameters.put("jvmRelease", applicationUtils.getApplication().getJvmRelease());
+        parameters.put("jvmOptions",
+                applicationUtils.getApplication().getServers().get(0).getJvmOptions().toString());
         try {
-
-            Map<String, String> parameters = new HashMap<>();
-            parameters.put("applicationName", applicationUtils.getApplication().getName());
-            parameters.put("jvmMemory", memory);
-            parameters.put("jvmRelease", applicationUtils.getApplication().getJvmRelease());
-            parameters.put("jvmOptions",
-                    applicationUtils.getApplication().getServers().get(0).getJvmOptions().toString());
             restUtils.sendPutCommand(authentificationUtils.finalHost + "/server/configuration/jvm",
                     authentificationUtils.getMap(), parameters).get("body");
-            applicationUtils.useApplication(applicationUtils.getApplication().getName());
-
-            statusCommand.setExitStatut(0);
-        } catch (ResourceAccessException e) {
-            log.log(Level.SEVERE,
-                    "The CLI can't etablished connexion with host servers. Please try later or contact an admin");
+        } catch (ManagerResponseException e) {
             statusCommand.setExitStatut(1);
-            return null;
-
-        } catch (Exception e) {
-            statusCommand.setExitStatut(1);
-            return null;
+            return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
         }
+
+        applicationUtils.useApplication(applicationUtils.getApplication().getName());
+
+        statusCommand.setExitStatut(0);
+
         return "Change memory on " + applicationUtils.getApplication().getName() + " successful";
     }
 
@@ -110,28 +105,23 @@ public class ServerUtils
             return checkResponse;
         }
 
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("applicationName", applicationUtils.getApplication().getName());
+        parameters.put("jvmOptions", opts);
+        parameters.put("jvmRelease", applicationUtils.getApplication().getJvmRelease());
+        parameters.put("jvmMemory",
+                applicationUtils.getApplication().getServers().get(0).getJvmMemory().toString());
         try {
-            Map<String, String> parameters = new HashMap<>();
-            parameters.put("applicationName", applicationUtils.getApplication().getName());
-            parameters.put("jvmOptions", opts);
-            parameters.put("jvmRelease", applicationUtils.getApplication().getJvmRelease());
-            parameters.put("jvmMemory",
-                    applicationUtils.getApplication().getServers().get(0).getJvmMemory().toString());
             restUtils.sendPutCommand(authentificationUtils.finalHost + "/server/configuration/jvm",
                     authentificationUtils.getMap(), parameters).get("body");
-            applicationUtils.useApplication(applicationUtils.getApplication().getName());
-
-            statusCommand.setExitStatut(0);
-        } catch (ResourceAccessException e) {
-            log.log(Level.SEVERE,
-                    "The CLI can't etablished connexion with host servers. Please try later or contact an admin");
+        } catch (ManagerResponseException e) {
             statusCommand.setExitStatut(1);
-            return null;
-
-        } catch (Exception e) {
-            statusCommand.setExitStatut(1);
-            return null;
+            return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
         }
+        applicationUtils.useApplication(applicationUtils.getApplication().getName());
+
+        statusCommand.setExitStatut(0);
+
         return "Add java options to " + applicationUtils.getApplication().getName() + " application successfully";
     }
 
@@ -156,13 +146,12 @@ public class ServerUtils
         }
 
         if (!availableJavaVersion.contains(jvmRelease)) {
-            log.log(Level.SEVERE, "The specified java version is not available");
             statusCommand.setExitStatut(1);
-            return null;
+            return ANSIConstants.ANSI_RED + "The specified java version is not available" + ANSIConstants.ANSI_RESET;
         }
 
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("applicationName", applicationName);
+        parameters.put("applicationName", applicationUtils.getApplication().getName());
         parameters.put("jvmRelease", jvmRelease);
         parameters.put("jvmMemory",
                 applicationUtils.getApplication().getServers().get(0).getJvmMemory().toString());
@@ -172,14 +161,14 @@ public class ServerUtils
             restUtils.sendPutCommand(authentificationUtils.finalHost + "/server/configuration/jvm",
                     authentificationUtils.getMap(), parameters).get("body");
         } catch (ManagerResponseException e) {
-            e.printStackTrace();
+            statusCommand.setExitStatut(1);
+            return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
         }
-        log.log(Level.INFO, "Your java version has been successfully changed");
-        applicationUtils.useApplication(applicationName);
+
+        applicationUtils.useApplication(applicationUtils.getApplication().getName());
         statusCommand.setExitStatut(0);
 
-
-        return null;
+        return "Your java version has been successfully changed";
     }
 
     /**
@@ -202,6 +191,7 @@ public class ServerUtils
         }
 
         String checkResponse = applicationUtils.checkAndRejectIfError(applicationName);
+
         if (checkResponse != null) {
             return checkResponse;
         }
@@ -212,13 +202,12 @@ public class ServerUtils
             applicationName = applicationUtils.getApplication().getName();
         }
         if (Integer.parseInt(portToOpen) < 1024) {
-            log.log(Level.SEVERE, "You must open a port bigger than 1024");
             statusCommand.setExitStatut(1);
-            return null;
+            return ANSIConstants.ANSI_RED + "You must open a port bigger than 1024" + ANSIConstants.ANSI_RESET;
         }
 
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("applicationName", applicationName);
+        parameters.put("applicationName", applicationUtils.getApplication().getName());
         parameters.put("portToOpen", portToOpen);
         parameters.put("alias", alias);
 
@@ -226,13 +215,13 @@ public class ServerUtils
             restUtils.sendPostCommand(authentificationUtils.finalHost + "/server/ports/open",
                     authentificationUtils.getMap(), parameters).get("body");
         } catch (ManagerResponseException e) {
-            e.printStackTrace();
+            statusCommand.setExitStatut(1);
+            return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
         }
-        log.log(Level.INFO, "The port " + portToOpen + " was been successfully opened on " + applicationName);
+
         statusCommand.setExitStatut(0);
 
-
-        return null;
+        return "The port " + portToOpen + " was been successfully opened on " + applicationUtils.getApplication().getName();
     }
 
 }
