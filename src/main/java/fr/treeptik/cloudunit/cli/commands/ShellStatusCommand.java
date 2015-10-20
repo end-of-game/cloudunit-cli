@@ -15,7 +15,6 @@
 
 package fr.treeptik.cloudunit.cli.commands;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliCommand;
 import org.springframework.shell.core.annotation.CliOption;
@@ -24,8 +23,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ShellStatusCommand implements CommandMarker {
 
-    @Value("${cli.version}")
-    public String cliVersion;
     private Integer exitStatut;
 
     public ShellStatusCommand() {
@@ -37,10 +34,6 @@ public class ShellStatusCommand implements CommandMarker {
         return exitStatut;
     }
 
-    @CliCommand(value = "version", help = "Get the current version")
-    public String version() {
-        return cliVersion;
-    }
 
     public Integer getExitStatut() {
         return exitStatut;

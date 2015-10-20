@@ -37,6 +37,18 @@ public abstract class AbstractServerCommandsIT extends AbstractShellIntegrationT
     }
 
     @Test
+    public void test01_shouldNotChangeJavaVersion() {
+        CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
+        cr = getShell().executeCommand("create-app --name " + applicationName + " --type " + serverType);
+        cr = getShell().executeCommand("use " + applicationName);
+        cr = getShell().executeCommand("change-java-version --javaVersion jdk1.8.0_25");
+        String result = cr.getResult().toString();
+        String expectedResult = "Your java version has been successfully changed";
+        Assert.assertEquals(expectedResult, result);
+
+    }
+
+    @Test
     public void test10_shouldChangeMemory() {
         CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
         cr = getShell().executeCommand("use " + applicationName);
@@ -48,7 +60,7 @@ public abstract class AbstractServerCommandsIT extends AbstractShellIntegrationT
     }
 
     @Test
-    public void test10_shouldChangeJavaOpts() {
+    public void test20_shouldChangeJavaOpts() {
         CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
         cr = getShell().executeCommand("use " + applicationName);
         cr = getShell().executeCommand("add-jvm-option \"-Dkey=value\"");
