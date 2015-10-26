@@ -15,11 +15,6 @@
 
 package fr.treeptik.cloudunit.cli.rest;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.DeserializationContext;
@@ -27,6 +22,11 @@ import org.codehaus.jackson.map.JsonDeserializer;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Component

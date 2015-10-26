@@ -1,6 +1,5 @@
 package fr.treeptik.cloudunit.cli.shell;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.shell.core.CommandMarker;

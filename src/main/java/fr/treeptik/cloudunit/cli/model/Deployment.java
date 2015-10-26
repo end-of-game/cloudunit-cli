@@ -15,13 +15,12 @@
 
 package fr.treeptik.cloudunit.cli.model;
 
-import java.io.Serializable;
-import java.util.Date;
-
+import fr.treeptik.cloudunit.cli.rest.JsonDateDeserializer;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
-import fr.treeptik.cloudunit.cli.rest.JsonDateDeserializer;
+import java.io.Serializable;
+import java.util.Date;
 
 public class Deployment implements Serializable {
 

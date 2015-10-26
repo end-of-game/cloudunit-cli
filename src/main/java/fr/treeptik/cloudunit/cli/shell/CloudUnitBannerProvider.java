@@ -35,6 +35,6 @@ public class CloudUnitBannerProvider implements BannerProvider, CommandMarker {
 
     @Override
     public String getProviderName() {
-        return null;
+        return "cloudunit-cli";
     }
 }

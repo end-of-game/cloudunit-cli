@@ -1,9 +1,7 @@
 package fr.treeptik.cloudunit.cli.integration;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.springframework.shell.Bootstrap;
 import org.springframework.shell.core.JLineShellComponent;
 
@@ -14,8 +12,12 @@ public class AbstractShellIntegrationTest {
 
     private static JLineShellComponent shell;
 
+    public static JLineShellComponent getShell() {
+        return shell;
+    }
+
     @Before
-    public  void startUp() throws InterruptedException {
+    public void startUp() throws InterruptedException {
         Bootstrap bootstrap = new Bootstrap();
         shell = bootstrap.getJLineShellComponent();
     }
@@ -23,10 +25,6 @@ public class AbstractShellIntegrationTest {
     @After
     public void shutdown() {
         shell.stop();
-    }
-
-    public static JLineShellComponent getShell() {
-        return shell;
     }
 
 

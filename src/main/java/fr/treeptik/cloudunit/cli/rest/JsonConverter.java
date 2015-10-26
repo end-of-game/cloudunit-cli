@@ -15,25 +15,13 @@
 
 package fr.treeptik.cloudunit.cli.rest;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import fr.treeptik.cloudunit.cli.model.*;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
-import fr.treeptik.cloudunit.cli.model.Application;
-import fr.treeptik.cloudunit.cli.model.ContainerUnit;
-import fr.treeptik.cloudunit.cli.model.FileUnit;
-import fr.treeptik.cloudunit.cli.model.Image;
-import fr.treeptik.cloudunit.cli.model.JsonResponseError;
-import fr.treeptik.cloudunit.cli.model.LogUnit;
-import fr.treeptik.cloudunit.cli.model.Message;
-import fr.treeptik.cloudunit.cli.model.Module;
-import fr.treeptik.cloudunit.cli.model.Server;
-import fr.treeptik.cloudunit.cli.model.Snapshot;
-import fr.treeptik.cloudunit.cli.model.User;
-import fr.treeptik.cloudunit.cli.utils.FileUtils;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JsonConverter {
 

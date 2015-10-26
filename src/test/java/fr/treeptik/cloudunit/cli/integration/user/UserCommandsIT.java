@@ -1,5 +1,6 @@
-package fr.treeptik.cloudunit.cli.integration;
+package fr.treeptik.cloudunit.cli.integration.user;
 
+import fr.treeptik.cloudunit.cli.integration.AbstractShellIntegrationTest;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;

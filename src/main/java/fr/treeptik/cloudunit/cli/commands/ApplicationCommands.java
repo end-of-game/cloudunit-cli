@@ -14,10 +14,6 @@
  */
 package fr.treeptik.cloudunit.cli.commands;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-
 import fr.treeptik.cloudunit.cli.utils.ApplicationUtils;
 import fr.treeptik.cloudunit.cli.utils.AuthentificationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +22,9 @@ import org.springframework.shell.core.annotation.CliCommand;
 import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 
 
 @Component
@@ -39,7 +38,7 @@ public class ApplicationCommands
     private ApplicationUtils applicationUtils;
 
 
-    @CliCommand(value = "informations", help = "Show informations about the current application")
+    @CliCommand(value = "informations", help = "Display informations about the current application")
     public String getApplication() {
         return applicationUtils.getInformations();
     }
@@ -87,7 +86,7 @@ public class ApplicationCommands
         return "Check your syntax and option chosen and it's the right path";
     }
 
-    @CliCommand(value = "list-aliases", help = "Show all application aliases")
+    @CliCommand(value = "list-aliases", help = "Display all application aliases")
     public String listAlias(@CliOption(key = {"", "name"}, mandatory = false, help = "Application name") String applicationName) {
         return applicationUtils.listAllAliases(applicationName);
     }
@@ -99,7 +98,7 @@ public class ApplicationCommands
     }
 
     @CliCommand(value = "rm-alias", help = "Remove an existing alias")
-    public String rmAlias(@CliOption(key = {""}, mandatory = false, help = "Application name") String applicationName,
+    public String rmAlias(@CliOption(key = {"", "name"}, mandatory = false, help = "Application name") String applicationName,
                           @CliOption(key = {"alias"}, mandatory = true, help = "Alias to access to your apps") String alias) {
         return applicationUtils.removeAlias(applicationName, alias);
     }

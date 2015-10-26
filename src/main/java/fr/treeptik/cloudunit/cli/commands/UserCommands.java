@@ -15,16 +15,15 @@
 
 package fr.treeptik.cloudunit.cli.commands;
 
+import fr.treeptik.cloudunit.cli.rest.RestUtils;
+import fr.treeptik.cloudunit.cli.utils.ApplicationUtils;
+import fr.treeptik.cloudunit.cli.utils.AuthentificationUtils;
+import fr.treeptik.cloudunit.cli.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliCommand;
 import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
-
-import fr.treeptik.cloudunit.cli.rest.RestUtils;
-import fr.treeptik.cloudunit.cli.utils.ApplicationUtils;
-import fr.treeptik.cloudunit.cli.utils.AuthentificationUtils;
-import fr.treeptik.cloudunit.cli.utils.UserUtils;
 
 @Component
 public class UserCommands implements CommandMarker {
@@ -54,11 +53,7 @@ public class UserCommands implements CommandMarker {
         if (authentificationUtils.getMap().isEmpty()) {
             return "Failed! You are not connected.";
         }
-        authentificationUtils.disconnect();
-        authentificationUtils.getMap().clear();
-        applicationUtils.setApplication(null);
-        restUtils.localContext = null;
-        return "Disconnected";
+        return authentificationUtils.disconnect();
     }
 
 }

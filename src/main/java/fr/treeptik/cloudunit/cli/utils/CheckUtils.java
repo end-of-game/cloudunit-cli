@@ -14,20 +14,20 @@
  */
 package fr.treeptik.cloudunit.cli.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import fr.treeptik.cloudunit.cli.commands.ShellStatusCommand;
+import fr.treeptik.cloudunit.cli.exception.ManagerResponseException;
 import fr.treeptik.cloudunit.cli.model.Application;
 import fr.treeptik.cloudunit.cli.model.Image;
 import fr.treeptik.cloudunit.cli.processor.InjectLogger;
 import fr.treeptik.cloudunit.cli.rest.JsonConverter;
 import fr.treeptik.cloudunit.cli.rest.RestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class CheckUtils {
@@ -53,11 +53,16 @@ public class CheckUtils {
     /**
      * TODO refactore
      */
-    public boolean checkImageNoExist(String imageName) {
+    public boolean checkImageNoExist(String imageName) throws ManagerResponseException {
 
-        List<Image> images = JsonConverter.getImages(restUtils.sendGetCommand(
-                authentificationUtils.finalHost + urlLoader.imageFind + "/all",
-                authentificationUtils.getMap()).get("body"));
+        List<Image> images = null;
+        try {
+            images = JsonConverter.getImages(restUtils.sendGetCommand(
+                    authentificationUtils.finalHost + urlLoader.imageFind + "/all",
+                    authentificationUtils.getMap()).get("body"));
+        } catch (ManagerResponseException e) {
+            throw new ManagerResponseException(e.getMessage(), e);
+        }
         List<String> imageNames = new ArrayList<>();
         for (Image image : images) {
             imageNames.add(image.getName());
@@ -72,12 +77,18 @@ public class CheckUtils {
             return false;
     }
 
-    public boolean checkImageNoEnabled(String imageName) {
+    public boolean checkImageNoEnabled(String imageName) throws ManagerResponseException {
 
-        List<Image> images = JsonConverter.getImages(restUtils.sendGetCommand(
-                authentificationUtils.finalHost + urlLoader.adminActions
-                        + urlLoader.imageEnabled,
-                authentificationUtils.getMap()).get("body"));
+        List<Image> images = null;
+        try {
+            images = JsonConverter.getImages(restUtils.sendGetCommand(
+                    authentificationUtils.finalHost + urlLoader.adminActions
+                            + urlLoader.imageEnabled,
+                    authentificationUtils.getMap()).get("body"));
+        } catch (ManagerResponseException e) {
+            throw new ManagerResponseException(e.getMessage(), e);
+
+        }
         List<String> imageNames = new ArrayList<>();
         for (Image image : images) {
             imageNames.add(image.getName());
@@ -92,9 +103,14 @@ public class CheckUtils {
             return false;
     }
 
-    public boolean checkApplicationExist(String applicationName) {
+    public boolean checkApplicationExist(String applicationName) throws ManagerResponseException {
         List<String> listApplicationNames = new ArrayList<>();
-        List<Application> listApplication = applicationUtils.listAllApps();
+        List<Application> listApplication = null;
+        try {
+            listApplication = applicationUtils.listAllApps();
+        } catch (ManagerResponseException e) {
+            throw new ManagerResponseException(e.getMessage(), e);
+        }
         if (listApplication.size() == 0) {
             return false;
         } else {

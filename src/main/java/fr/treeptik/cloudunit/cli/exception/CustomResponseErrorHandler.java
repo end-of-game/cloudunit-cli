@@ -15,9 +15,8 @@
 
 package fr.treeptik.cloudunit.cli.exception;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-
+import fr.treeptik.cloudunit.cli.model.JsonResponseError;
+import fr.treeptik.cloudunit.cli.rest.JsonConverter;
 import org.apache.commons.io.LineIterator;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -25,8 +24,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.util.EntityUtils;
 
-import fr.treeptik.cloudunit.cli.model.JsonResponseError;
-import fr.treeptik.cloudunit.cli.rest.JsonConverter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class CustomResponseErrorHandler implements ResponseHandler<String> {
 
@@ -40,6 +39,7 @@ public class CustomResponseErrorHandler implements ResponseHandler<String> {
             HttpEntity entity = response.getEntity();
             return entity != null ? EntityUtils.toString(entity) : null;
         } else {
+
             switch (status) {
                 case 500:
                     InputStreamReader reader = null;
@@ -51,10 +51,8 @@ public class CustomResponseErrorHandler implements ResponseHandler<String> {
                     while (lineIterator.hasNext()) {
                         jsonStringBuilder.append(lineIterator.nextLine());
                     }
-
                     JsonResponseError error = JsonConverter
                             .getError(jsonStringBuilder.toString());
-
                     throw new ClientProtocolException(error.getMessage());
                 case 401:
                     throw new ClientProtocolException(
@@ -63,11 +61,32 @@ public class CustomResponseErrorHandler implements ResponseHandler<String> {
                     throw new ClientProtocolException(
                             "Status 403 - You must be an admin to execute this command!");
                 case 404:
-                    throw new ClientProtocolException(
-                            "Status 404 - The server can treat the request, please contact an admin");
+                    reader = null;
+                    reader = new InputStreamReader(response.getEntity()
+                            .getContent());
+                    lineIterator = new LineIterator(reader);
+                    jsonStringBuilder = new StringBuilder();
+
+                    while (lineIterator.hasNext()) {
+                        jsonStringBuilder.append(lineIterator.nextLine());
+                    }
+                    error = JsonConverter
+                            .getError(jsonStringBuilder.toString());
+                    throw new ClientProtocolException(error.getMessage());
                 default:
-                    throw new ClientProtocolException(
-                            "Cloudunit server does not response. Please contact an admin");
+                    reader = null;
+                    reader = new InputStreamReader(response.getEntity()
+                            .getContent());
+                    lineIterator = new LineIterator(reader);
+                    jsonStringBuilder = new StringBuilder();
+
+                    while (lineIterator.hasNext()) {
+                        jsonStringBuilder.append(lineIterator.nextLine());
+                    }
+                    error = JsonConverter
+                            .getError(jsonStringBuilder.toString());
+                    throw new ClientProtocolException(error.getMessage()
+                    );
             }
         }
 

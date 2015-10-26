@@ -14,13 +14,12 @@
  */
 package fr.treeptik.cloudunit.cli.commands;
 
+import fr.treeptik.cloudunit.cli.utils.ModuleUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliCommand;
 import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
-
-import fr.treeptik.cloudunit.cli.utils.ModuleUtils;
 
 @Component
 public class ModuleCommands implements CommandMarker {
@@ -42,7 +41,7 @@ public class ModuleCommands implements CommandMarker {
         return moduleUtils.removeModule(moduleName);
     }
 
-    @CliCommand(value = "show-modules", help = "Show informations about all modules of the current application")
+    @CliCommand(value = "display-modules", help = "Display informations about all modules of the current application")
     public String getApplication() {
         return moduleUtils.getListModules();
     }

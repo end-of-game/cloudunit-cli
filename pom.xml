@@ -18,6 +18,8 @@
         <maven.jar.plugin.version>2.4</maven.jar.plugin.version>
         <spring.version>3.2.14.RELEASE</spring.version>
         <httpcomponents.version>4.5.1</httpcomponents.version>
+        <maven.surefire.plugin.version>2.18</maven.surefire.plugin.version>
+
 
         <!-- CloudUnit Properties -->
 
@@ -209,6 +211,16 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.plugin.version}</version>
+                <configuration>
+                    <includes>
+                        <include>**/*IT.java</include>
+                    </includes>
+                </configuration>
             </plugin>
         </plugins>
 

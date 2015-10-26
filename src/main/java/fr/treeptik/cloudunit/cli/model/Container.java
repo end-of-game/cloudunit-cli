@@ -14,15 +14,14 @@
  */
 package fr.treeptik.cloudunit.cli.model;
 
+import fr.treeptik.cloudunit.cli.rest.JsonDateDeserializer;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-
-import fr.treeptik.cloudunit.cli.rest.JsonDateDeserializer;
 
 public class Container
         implements Serializable {

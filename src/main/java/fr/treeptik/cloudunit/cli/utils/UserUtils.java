@@ -15,20 +15,18 @@
 
 package fr.treeptik.cloudunit.cli.utils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import fr.treeptik.cloudunit.cli.commands.ShellStatusCommand;
+import fr.treeptik.cloudunit.cli.processor.InjectLogger;
+import fr.treeptik.cloudunit.cli.rest.RestUtils;
 import jline.console.ConsoleReader;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 
-import fr.treeptik.cloudunit.cli.commands.ShellStatusCommand;
-import fr.treeptik.cloudunit.cli.processor.InjectLogger;
-import fr.treeptik.cloudunit.cli.rest.RestUtils;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class UserUtils {
