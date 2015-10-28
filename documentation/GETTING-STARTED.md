@@ -164,7 +164,7 @@ Three commands can be used to change JVM configuration :
 - Change your Java release (two releases are available : jdk1.7.0_55 and jdk1.8.0_25). By default, the application has been created with the Oracle JKD 1.7.0_55.
 
 ```bash
-cloudunit-myapp> change-java-version -javaVersion jdk1.8.0_25
+cloudunit-myapp> change-java-version --javaVersion jdk1.8.0_25
 Your java version has been successfully changed
 
 ```
@@ -172,7 +172,7 @@ Your java version has been successfully changed
 - Change your JVM memory. The available sizes (in MB) are : 512 (by default), 1024, 2048, 3072
 
 ```bash
-cloudunit-myapp> change-jvm-memory -size 1024
+cloudunit-myapp> change-jvm-memory --size 1024
 Change memory on myapp successful
 
 ```
@@ -223,7 +223,7 @@ You can manage alias to access to your app :
 - Create a new alias :
 
 ```bash
-cloudunit-myapp> add-alias -alias mywebsite
+cloudunit-myapp> add-alias --alias mywebsite
 Your alias mywebsite has been successfully added to myapp
 
 ```
@@ -243,7 +243,7 @@ cloudunit-myapp> list-aliases
 - Remove an alias
 
 ```bash
-cloudunit-myapp> rm-alias -alias mywebsite
+cloudunit-myapp> rm-alias --alias mywebsite
 This alias has successful been deleted
 
 ```
