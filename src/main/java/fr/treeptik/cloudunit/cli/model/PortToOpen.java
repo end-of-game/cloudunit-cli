@@ -20,45 +20,45 @@ import java.io.Serializable;
 
 public class PortToOpen implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private Integer id;
+    private static final long serialVersionUID = 1L;
 
-	private String port;
+    private Integer id;
 
-	private String alias;
+    private String port;
 
-	public PortToOpen() {
-	}
+    private String alias;
 
-	public PortToOpen(String port, String alias) {
-		this.port = port;
-		this.alias = alias;
-	}
+    public PortToOpen() {
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public PortToOpen(String port, String alias) {
+        this.port = port;
+        this.alias = alias;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public String getPort() {
-		return port;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setPort(String port) {
-		this.port = port;
-	}
+    public String getPort() {
+        return port;
+    }
 
-	public String getAlias() {
-		return alias;
-	}
+    public void setPort(String port) {
+        this.port = port;
+    }
 
-	public void setAlias(String alias) {
-		this.alias = alias;
-	}
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
 
 }
 

@@ -16,5 +16,5 @@
 package fr.treeptik.cloudunit.cli.model;
 
 public enum Type {
-	GITPUSH, WAR
+    GITPUSH, WAR
 }

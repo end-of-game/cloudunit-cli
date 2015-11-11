@@ -22,75 +22,73 @@ import java.util.Map;
 
 public class Server extends Container implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Long jvmMemory;
+    private Long jvmMemory;
 
-	private String jvmOptions;
+    private String jvmOptions;
+    private String managerLocation;
+    private String jvmRelease;
 
-	public String getJvmRelease() {
-		return jvmRelease;
-	}
+    public Server(Integer id, Date startDate, String name, String containerID,
+                  Long memorySize, String containerIP, String dockerState,
+                  Status status, Image image, Map<String, String> listPorts,
+                  List<String> links) {
+        super();
+        this.id = id;
+        this.startDate = startDate;
+        this.name = name;
+        this.containerID = containerID;
+        this.memorySize = memorySize;
+        this.containerIP = containerIP;
+        this.dockerState = dockerState;
+        this.status = status;
+        this.image = image;
+    }
 
-	public void setJvmRelease(String jvmRelease) {
-		this.jvmRelease = jvmRelease;
-	}
+    public Server() {
+        super();
+    }
 
-	private String managerLocation;
+    public String getJvmRelease() {
+        return jvmRelease;
+    }
 
-	private String jvmRelease;
+    public void setJvmRelease(String jvmRelease) {
+        this.jvmRelease = jvmRelease;
+    }
 
-	public Server(Integer id, Date startDate, String name, String containerID,
-			Long memorySize, String containerIP, String dockerState,
-			Status status, Image image, Map<String, String> listPorts,
-			List<String> links) {
-		super();
-		this.id = id;
-		this.startDate = startDate;
-		this.name = name;
-		this.containerID = containerID;
-		this.memorySize = memorySize;
-		this.containerIP = containerIP;
-		this.dockerState = dockerState;
-		this.status = status;
-		this.image = image;
-	}
+    public Long getJvmMemory() {
+        return jvmMemory;
+    }
 
-	public Server() {
-		super();
-	}
+    public void setJvmMemory(Long jvmMemory) {
+        this.jvmMemory = jvmMemory;
+    }
 
-	public Long getJvmMemory() {
-		return jvmMemory;
-	}
+    public String getJvmOptions() {
+        return jvmOptions;
+    }
 
-	public void setJvmMemory(Long jvmMemory) {
-		this.jvmMemory = jvmMemory;
-	}
+    public void setJvmOptions(String jvmOptions) {
+        this.jvmOptions = jvmOptions;
+    }
 
-	public String getJvmOptions() {
-		return jvmOptions;
-	}
+    public String getManagerLocation() {
+        return managerLocation;
+    }
 
-	public void setJvmOptions(String jvmOptions) {
-		this.jvmOptions = jvmOptions;
-	}
+    public void setManagerLocation(String managerLocation) {
+        this.managerLocation = managerLocation;
+    }
 
-	public String getManagerLocation() {
-		return managerLocation;
-	}
-
-	public void setManagerLocation(String managerLocation) {
-		this.managerLocation = managerLocation;
-	}
-
-	@Override
-	public String toString() {
-		return "Server [id=" + id + ", startDate=" + startDate + ", name="
-				+ name + ", containerID=" + containerID + ", memorySize="
-				+ memorySize + ", containerIP=" + containerIP
-				+ ", dockerState=" + dockerState + ", image=" + image
-				+ ", status=" + status + "]";
-	}
+    @Override
+    public String toString() {
+        return "Server [id=" + id + ", startDate=" + startDate + ", name="
+                + name + ", containerID=" + containerID + ", memorySize="
+                + memorySize + ", containerIP=" + containerIP
+                + ", dockerState=" + dockerState + ", image=" + image
+                + ", status=" + status + "]";
+    }
 
 }

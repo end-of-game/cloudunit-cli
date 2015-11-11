@@ -2,7 +2,7 @@
 
 ## What is it?
 
-CloudUnit CLI is a command line client for [CloudUnit platform 1.0](https://github.com/Treeptik/CloudUnit) writing in Java (based on Spring shell). You can access all main available features of CloudUnit PaaS using it.
+CloudUnit CLI is a command line client for [CloudUnit platform 1.0](https://github.com/Treeptik/CloudUnit) writing in Java (based on Spring shell 1.1.0). You can access all main available features of CloudUnit PaaS using it.
 
 ## Getting started
 
@@ -15,15 +15,7 @@ If you want to take part of CloudUnit CLI development, you will need :
 - JDK 1.7 +
 - Maven 3.X
 
-Then, clone our Spring shell fork [here](https://github.com/Treeptik/SpringShell-CU) and install it in your local m2 repository :
-
-```bash
-git clone git@github.com:Treeptik/SpringShell-CU.git
-cd SpringShell-CU
-mvn clean install
-
-```
-Now, you can clone CloudUnit CLI 1.0 project and develop. Use the exec maven plugin to build and start it quicky as following : 
+Clone the CloudUnit CLI 1.0 project and develop. Use the exec maven plugin to build and start it quicky as following :
 
 ```bash
 git clone git@github.com:Treeptik/CloudUnit-CLI.git

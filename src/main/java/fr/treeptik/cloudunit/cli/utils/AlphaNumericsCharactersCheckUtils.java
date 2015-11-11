@@ -20,24 +20,23 @@ import java.text.Normalizer;
 import java.text.Normalizer.Form;
 
 /**
- * 
  * @author guillaume check and replace non alpha numerics chars
  */
 public class AlphaNumericsCharactersCheckUtils {
 
-	public static String convertToAlphaNumerics(String value, Integer countApp)
-			throws UnsupportedEncodingException {
+    public static String convertToAlphaNumerics(String value, Integer countApp)
+            throws UnsupportedEncodingException {
 
-		value = new String(value.getBytes("ISO-8859-1"), "UTF-8");
-		value = Normalizer.normalize(value, Form.NFD);
-		value = value.replaceAll("[^\\p{ASCII}]", "")
-				.replaceAll("[^a-zA-Z0-9\\s]", "").replace(" ", "");
+        value = new String(value.getBytes("ISO-8859-1"), "UTF-8");
+        value = Normalizer.normalize(value, Form.NFD);
+        value = value.replaceAll("[^\\p{ASCII}]", "")
+                .replaceAll("[^a-zA-Z0-9\\s]", "").replace(" ", "");
 
-		if (value.equalsIgnoreCase("")) {
-			value = "default" + countApp;
-		}
+        if (value.equalsIgnoreCase("")) {
+            value = "default" + countApp;
+        }
 
-		return value;
+        return value;
 
-	}
+    }
 }

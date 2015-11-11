@@ -15,7 +15,7 @@
 
 package fr.treeptik.cloudunit.cli.utils;
 
-import java.awt.Desktop;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -24,238 +24,238 @@ import java.util.List;
 
 public class DesktopAPI {
 
-	public static boolean browse(URI uri) {
+    public static boolean browse(URI uri) {
 
-		if (openSystemSpecific(uri.toString()))
-			return true;
+        if (openSystemSpecific(uri.toString()))
+            return true;
 
-		if (browseDESKTOP(uri))
-			return true;
+        if (browseDESKTOP(uri))
+            return true;
 
-		return false;
-	}
+        return false;
+    }
 
-	public static boolean open(File file) {
+    public static boolean open(File file) {
 
-		if (openSystemSpecific(file.getPath()))
-			return true;
+        if (openSystemSpecific(file.getPath()))
+            return true;
 
-		if (openDESKTOP(file))
-			return true;
+        if (openDESKTOP(file))
+            return true;
 
-		return false;
-	}
+        return false;
+    }
 
-	public static boolean edit(File file) {
+    public static boolean edit(File file) {
 
-		if (openSystemSpecific(file.getPath()))
-			return true;
+        if (openSystemSpecific(file.getPath()))
+            return true;
 
-		if (editDESKTOP(file))
-			return true;
+        if (editDESKTOP(file))
+            return true;
 
-		return false;
-	}
+        return false;
+    }
 
-	private static boolean openSystemSpecific(String what) {
+    private static boolean openSystemSpecific(String what) {
 
-		EnumOS os = getOs();
+        EnumOS os = getOs();
 
-		if (os.isLinux()) {
-			if (runCommand("gvfs-open", "%s", what))
-				return true;
-			if (runCommand("gnome-open", "%s", what))
-				return true;
-			if (runCommand("xdg-open", "%s", what))
-				return true;
-		}
+        if (os.isLinux()) {
+            if (runCommand("gvfs-open", "%s", what))
+                return true;
+            if (runCommand("gnome-open", "%s", what))
+                return true;
+            if (runCommand("xdg-open", "%s", what))
+                return true;
+        }
 
-		if (os.isMac()) {
-			if (runCommand("open", "%s", what))
-				return true;
-		}
+        if (os.isMac()) {
+            if (runCommand("open", "%s", what))
+                return true;
+        }
 
-		if (os.isWindows()) {
-			if (runCommand("explorer", "%s", what))
-				return true;
-		}
+        if (os.isWindows()) {
+            if (runCommand("explorer", "%s", what))
+                return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	private static boolean browseDESKTOP(URI uri) {
+    private static boolean browseDESKTOP(URI uri) {
 
-		try {
-			if (!Desktop.isDesktopSupported()) {
-				logErr("Platform is not supported.");
-				return false;
-			}
+        try {
+            if (!Desktop.isDesktopSupported()) {
+                logErr("Platform is not supported.");
+                return false;
+            }
 
-			if (!Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-				logErr("BORWSE is not supported.");
-				return false;
-			}
+            if (!Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                logErr("BORWSE is not supported.");
+                return false;
+            }
 
-			Desktop.getDesktop().browse(uri);
+            Desktop.getDesktop().browse(uri);
 
-			return true;
-		} catch (Throwable t) {
-			logErr("Error using desktop browse.", t);
-			return false;
-		}
-	}
+            return true;
+        } catch (Throwable t) {
+            logErr("Error using desktop browse.", t);
+            return false;
+        }
+    }
 
-	private static boolean openDESKTOP(File file) {
+    private static boolean openDESKTOP(File file) {
 
-		logOut("Trying to use Desktop.getDesktop().open() with "
-				+ file.toString());
-		try {
-			if (!Desktop.isDesktopSupported()) {
-				logErr("Platform is not supported.");
-				return false;
-			}
+        logOut("Trying to use Desktop.getDesktop().open() with "
+                + file.toString());
+        try {
+            if (!Desktop.isDesktopSupported()) {
+                logErr("Platform is not supported.");
+                return false;
+            }
 
-			if (!Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
-				logErr("OPEN is not supported.");
-				return false;
-			}
+            if (!Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
+                logErr("OPEN is not supported.");
+                return false;
+            }
 
-			Desktop.getDesktop().open(file);
+            Desktop.getDesktop().open(file);
 
-			return true;
-		} catch (Throwable t) {
-			logErr("Error using desktop open.", t);
-			return false;
-		}
-	}
+            return true;
+        } catch (Throwable t) {
+            logErr("Error using desktop open.", t);
+            return false;
+        }
+    }
 
-	private static boolean editDESKTOP(File file) {
+    private static boolean editDESKTOP(File file) {
 
-		logOut("Trying to use Desktop.getDesktop().edit() with " + file);
-		try {
-			if (!Desktop.isDesktopSupported()) {
-				logErr("Platform is not supported.");
-				return false;
-			}
+        logOut("Trying to use Desktop.getDesktop().edit() with " + file);
+        try {
+            if (!Desktop.isDesktopSupported()) {
+                logErr("Platform is not supported.");
+                return false;
+            }
 
-			if (!Desktop.getDesktop().isSupported(Desktop.Action.EDIT)) {
-				logErr("EDIT is not supported.");
-				return false;
-			}
+            if (!Desktop.getDesktop().isSupported(Desktop.Action.EDIT)) {
+                logErr("EDIT is not supported.");
+                return false;
+            }
 
-			Desktop.getDesktop().edit(file);
+            Desktop.getDesktop().edit(file);
 
-			return true;
-		} catch (Throwable t) {
-			logErr("Error using desktop edit.", t);
-			return false;
-		}
-	}
+            return true;
+        } catch (Throwable t) {
+            logErr("Error using desktop edit.", t);
+            return false;
+        }
+    }
 
-	private static boolean runCommand(String command, String args, String file) {
+    private static boolean runCommand(String command, String args, String file) {
 
-		String[] parts = prepareCommand(command, args, file);
+        String[] parts = prepareCommand(command, args, file);
 
-		try {
-			Process p = Runtime.getRuntime().exec(parts);
-			if (p == null)
-				return false;
+        try {
+            Process p = Runtime.getRuntime().exec(parts);
+            if (p == null)
+                return false;
 
-			try {
-				int retval = p.exitValue();
-				if (retval == 0) {
-					logErr("Process ended immediately.");
-					return false;
-				} else {
-					logErr("Process crashed.");
-					return false;
-				}
-			} catch (IllegalThreadStateException itse) {
-				return true;
-			}
-		} catch (IOException e) {
-			logErr("Error running command.", e);
-			return false;
-		}
-	}
+            try {
+                int retval = p.exitValue();
+                if (retval == 0) {
+                    logErr("Process ended immediately.");
+                    return false;
+                } else {
+                    logErr("Process crashed.");
+                    return false;
+                }
+            } catch (IllegalThreadStateException itse) {
+                return true;
+            }
+        } catch (IOException e) {
+            logErr("Error running command.", e);
+            return false;
+        }
+    }
 
-	private static String[] prepareCommand(String command, String args,
-			String file) {
+    private static String[] prepareCommand(String command, String args,
+                                           String file) {
 
-		List<String> parts = new ArrayList<String>();
-		parts.add(command);
+        List<String> parts = new ArrayList<String>();
+        parts.add(command);
 
-		if (args != null) {
-			for (String s : args.split(" ")) {
-				s = String.format(s, file); // put in the filename thing
+        if (args != null) {
+            for (String s : args.split(" ")) {
+                s = String.format(s, file); // put in the filename thing
 
-				parts.add(s.trim());
-			}
-		}
+                parts.add(s.trim());
+            }
+        }
 
-		return parts.toArray(new String[parts.size()]);
-	}
+        return parts.toArray(new String[parts.size()]);
+    }
 
-	private static void logErr(String msg, Throwable t) {
-		System.err.println(msg);
-		t.printStackTrace();
-	}
+    private static void logErr(String msg, Throwable t) {
+        System.err.println(msg);
+        t.printStackTrace();
+    }
 
-	private static void logErr(String msg) {
-		System.err.println(msg);
-	}
+    private static void logErr(String msg) {
+        System.err.println(msg);
+    }
 
-	private static void logOut(String msg) {
-		System.out.println(msg);
-	}
+    private static void logOut(String msg) {
+        System.out.println(msg);
+    }
 
-	public static enum EnumOS {
-		linux, macos, solaris, unknown, windows;
+    public static EnumOS getOs() {
 
-		public boolean isLinux() {
+        String s = System.getProperty("os.name").toLowerCase();
 
-			return this == linux || this == solaris;
-		}
+        if (s.contains("win")) {
+            return EnumOS.windows;
+        }
 
-		public boolean isMac() {
+        if (s.contains("mac")) {
+            return EnumOS.macos;
+        }
 
-			return this == macos;
-		}
+        if (s.contains("solaris")) {
+            return EnumOS.solaris;
+        }
 
-		public boolean isWindows() {
+        if (s.contains("sunos")) {
+            return EnumOS.solaris;
+        }
 
-			return this == windows;
-		}
-	}
+        if (s.contains("linux")) {
+            return EnumOS.linux;
+        }
 
-	public static EnumOS getOs() {
+        if (s.contains("unix")) {
+            return EnumOS.linux;
+        } else {
+            return EnumOS.unknown;
+        }
+    }
 
-		String s = System.getProperty("os.name").toLowerCase();
+    public static enum EnumOS {
+        linux, macos, solaris, unknown, windows;
 
-		if (s.contains("win")) {
-			return EnumOS.windows;
-		}
+        public boolean isLinux() {
 
-		if (s.contains("mac")) {
-			return EnumOS.macos;
-		}
+            return this == linux || this == solaris;
+        }
 
-		if (s.contains("solaris")) {
-			return EnumOS.solaris;
-		}
+        public boolean isMac() {
 
-		if (s.contains("sunos")) {
-			return EnumOS.solaris;
-		}
+            return this == macos;
+        }
 
-		if (s.contains("linux")) {
-			return EnumOS.linux;
-		}
+        public boolean isWindows() {
 
-		if (s.contains("unix")) {
-			return EnumOS.linux;
-		} else {
-			return EnumOS.unknown;
-		}
-	}
+            return this == windows;
+        }
+    }
 }

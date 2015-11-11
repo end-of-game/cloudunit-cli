@@ -16,5 +16,5 @@
 package fr.treeptik.cloudunit.cli.model;
 
 public enum Status {
-	START, STOP, PENDING, FAIL;
+    START, STOP, PENDING, FAIL;
 }

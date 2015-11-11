@@ -15,176 +15,175 @@
 
 package fr.treeptik.cloudunit.cli.model;
 
+import fr.treeptik.cloudunit.cli.rest.JsonDateDeserializer;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-
-import fr.treeptik.cloudunit.cli.rest.JsonDateDeserializer;
-
 public class User implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Integer id;
+    private Integer id;
 
-	private String firstName;
+    private String firstName;
 
-	private String lastName;
+    private String lastName;
 
-	private String organization;
+    private String organization;
 
-	@JsonDeserialize(using = JsonDateDeserializer.class)
-	private Date signin;
+    @JsonDeserialize(using = JsonDateDeserializer.class)
+    private Date signin;
 
-	private String email;
+    private String email;
 
-	private String login;
+    private String login;
 
-	private String password;
+    private String password;
 
-	private String status;
+    private String status;
 
-	@JsonDeserialize(using = JsonDateDeserializer.class)
-	private Date lastConnection;
+    @JsonDeserialize(using = JsonDateDeserializer.class)
+    private Date lastConnection;
 
-	private Role role;
+    private Role role;
 
-	@JsonIgnore
-	private List<Application> applications;
+    @JsonIgnore
+    private List<Application> applications;
 
-	private String isAllowed;
+    private String isAllowed;
 
-	public User() {
+    public User() {
 
-	}
+    }
 
-	public User(Integer id, String firstName, String lastName, Date signin,
-			String email, String password, String status, Role role,
-			List<Application> applications) {
-		super();
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.signin = signin;
-		this.email = email;
-		this.password = password;
-		this.status = status;
-		this.role = role;
-		this.applications = applications;
-	}
+    public User(Integer id, String firstName, String lastName, Date signin,
+                String email, String password, String status, Role role,
+                List<Application> applications) {
+        super();
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.signin = signin;
+        this.email = email;
+        this.password = password;
+        this.status = status;
+        this.role = role;
+        this.applications = applications;
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public String getOrganization() {
-		return organization;
-	}
+    public String getOrganization() {
+        return organization;
+    }
 
-	public void setOrganization(String organization) {
-		this.organization = organization;
-	}
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
 
-	public Date getSignin() {
-		return signin;
-	}
+    public Date getSignin() {
+        return signin;
+    }
 
-	public void setSignin(Date signin) {
-		this.signin = signin;
-	}
+    public void setSignin(Date signin) {
+        this.signin = signin;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public Role getRole() {
-		return role;
-	}
+    public Role getRole() {
+        return role;
+    }
 
-	public void setRole(Role role) {
-		this.role = role;
-	}
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
-	public List<Application> getApplications() {
-		return applications;
-	}
+    public List<Application> getApplications() {
+        return applications;
+    }
 
-	public void setApplications(List<Application> applications) {
-		this.applications = applications;
-	}
+    public void setApplications(List<Application> applications) {
+        this.applications = applications;
+    }
 
-	public Date getLastConnection() {
-		return lastConnection;
-	}
+    public Date getLastConnection() {
+        return lastConnection;
+    }
 
-	public void setLastConnection(Date lastConnection) {
-		this.lastConnection = lastConnection;
-	}
+    public void setLastConnection(Date lastConnection) {
+        this.lastConnection = lastConnection;
+    }
 
-	public String getLogin() {
-		return login;
-	}
+    public String getLogin() {
+        return login;
+    }
 
-	public void setLogin(String login) {
-		this.login = login;
-	}
+    public void setLogin(String login) {
+        this.login = login;
+    }
 
-	public String getIsAllowed() {
-		return isAllowed;
-	}
+    public String getIsAllowed() {
+        return isAllowed;
+    }
 
-	public void setIsAllowed(String isAllowed) {
-		this.isAllowed = isAllowed;
-	}
+    public void setIsAllowed(String isAllowed) {
+        this.isAllowed = isAllowed;
+    }
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName="
-				+ lastName + ", signin=" + signin + ", email=" + email
-				+ ", password=" + password + ", status=" + status + "]";
-	}
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", firstName=" + firstName + ", lastName="
+                + lastName + ", signin=" + signin + ", email=" + email
+                + ", password=" + password + ", status=" + status + "]";
+    }
 
 }

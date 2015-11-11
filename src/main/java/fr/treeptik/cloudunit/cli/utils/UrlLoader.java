@@ -21,83 +21,83 @@ import org.springframework.stereotype.Component;
 @Component
 public class UrlLoader {
 
-	// Application Rest Url
+    // Application Rest Url
 
-	@Value("${application.actions}")
-	public String actionApplication;
+    @Value("${application.actions}")
+    public String actionApplication;
 
-	@Value("${application.create}")
-	public String createApplication;
+    @Value("${application.create}")
+    public String createApplication;
 
-	@Value("${application.list}")
-	public String listAllApplications;
+    @Value("${application.list}")
+    public String listAllApplications;
 
-	@Value("${application.listTags}")
-	public String listTags;
+    @Value("${application.listTags}")
+    public String listTags;
 
-	@Value("${application.deployWar}")
-	public String deployWar;
+    @Value("${application.deployWar}")
+    public String deployWar;
 
-	@Value("${application.deployWarFromTag}")
-	public String deployWarFromTag;
+    @Value("${application.deployWarFromTag}")
+    public String deployWarFromTag;
 
-	@Value("${application.messages}")
-	public String getMessages;
+    @Value("${application.messages}")
+    public String getMessages;
 
-	// Server Rest url
-	@Value("${server.prefix}")
-	public String serverPrefix;
+    // Server Rest url
+    @Value("${server.prefix}")
+    public String serverPrefix;
 
-	@Value("${server.name}")
-	public String serverName;
+    @Value("${server.name}")
+    public String serverName;
 
-	@Value("${server.logs}")
-	public String getLogs;
+    @Value("${server.logs}")
+    public String getLogs;
 
-	@Value("${suffix.start}")
-	public String start;
+    @Value("${suffix.start}")
+    public String start;
 
-	@Value("${suffix.stop}")
-	public String stop;
+    @Value("${suffix.stop}")
+    public String stop;
 
-	@Value("${suffix.restart}")
-	public String restart;
+    @Value("${suffix.restart}")
+    public String restart;
 
-	@Value("${server.stream}")
-	public String getStream;
+    @Value("${server.stream}")
+    public String getStream;
 
-	@Value("${server.addserver}")
-	public String addServer;
+    @Value("${server.addserver}")
+    public String addServer;
 
-	// Module Rest url
+    // Module Rest url
 
-	@Value("${module.prefix}")
-	public String modulePrefix;
+    @Value("${module.prefix}")
+    public String modulePrefix;
 
-	@Value("${module.name}")
-	public String moduleName;
+    @Value("${module.name}")
+    public String moduleName;
 
-	// User Rest url
+    // User Rest url
 
-	@Value("${user.connect}")
-	public String connect;
+    @Value("${user.connect}")
+    public String connect;
 
-	// admin prefix
+    // admin prefix
 
-	@Value("${admin}")
-	public String adminActions;
+    @Value("${admin}")
+    public String adminActions;
 
-	// imagePrefix
-	@Value("${image.prefix}")
-	public String imagePrefix;
+    // imagePrefix
+    @Value("${image.prefix}")
+    public String imagePrefix;
 
-	@Value("${image.find}")
-	public String imageFind;
+    @Value("${image.find}")
+    public String imageFind;
 
-	@Value("${image.enabled}")
-	public String imageEnabled;
+    @Value("${image.enabled}")
+    public String imageEnabled;
 
-	@Value("${application.logs}")
-	public String logs;
+    @Value("${application.logs}")
+    public String logs;
 
 }

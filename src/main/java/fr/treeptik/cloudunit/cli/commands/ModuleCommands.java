@@ -14,37 +14,36 @@
  */
 package fr.treeptik.cloudunit.cli.commands;
 
+import fr.treeptik.cloudunit.cli.utils.ModuleUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliCommand;
 import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
-import fr.treeptik.cloudunit.cli.utils.ModuleUtils;
-
 @Component
 public class ModuleCommands implements CommandMarker {
 
-	@Autowired
-	private ModuleUtils moduleUtils;
+    @Autowired
+    private ModuleUtils moduleUtils;
 
-	@CliCommand(value = "add-module", help = "Add a new module to the current application")
-	public String addModule(
-			@CliOption(key = { "name" }, mandatory = true, help = "Module type \n MYSQL 5.5 : -name mysql-5-5 \n POSTGRES 9.3 : -name postgres-9-3 \n" +
-					" Mongo 2.6 : -name mongo-2-6") String moduleName) {
+    @CliCommand(value = "add-module", help = "Add a new module to the current application")
+    public String addModule(
+            @CliOption(key = {"name"}, mandatory = true, help = "Module type \n MYSQL 5.5 : -name mysql-5-5 \n POSTGRES 9.3 : -name postgres-9-3 \n" +
+                    " Mongo 2.6 : -name mongo-2-6") String moduleName) {
 
-		return moduleUtils.addModule(moduleName, null);
-	}
+        return moduleUtils.addModule(moduleName, null);
+    }
 
-	@CliCommand(value = "rm-module", help = "Remove a module from the current application")
-	public String removeModule(
-			@CliOption(key = { "name" }, mandatory = true, help = "Name of the module. Use show-modules command to get all modules of this application") String moduleName) {
-		return moduleUtils.removeModule(moduleName);
-	}
+    @CliCommand(value = "rm-module", help = "Remove a module from the current application")
+    public String removeModule(
+            @CliOption(key = {"name"}, mandatory = true, help = "Name of the module. Use show-modules command to get all modules of this application") String moduleName) {
+        return moduleUtils.removeModule(moduleName);
+    }
 
-	@CliCommand(value = "show-modules", help = "Show informations about all modules of the current application")
-	public String getApplication() {
-		return moduleUtils.getListModules();
-	}
+    @CliCommand(value = "display-modules", help = "Display informations about all modules of the current application")
+    public String getApplication() {
+        return moduleUtils.getListModules();
+    }
 
 }

@@ -14,25 +14,14 @@
  */
 package fr.treeptik.cloudunit.cli.commands;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
-import org.springframework.shell.core.annotation.CliCommand;
-import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
-
-import fr.treeptik.cloudunit.cli.utils.ApplicationUtils;
-import fr.treeptik.cloudunit.cli.utils.AuthentificationUtils;
-import fr.treeptik.cloudunit.cli.utils.FileUtils;
 
 @Component
 public class FileCommands implements CommandMarker {
 
     /*
-	@Autowired
+    @Autowired
 	private AuthentificationUtils authentificationUtils;
 
 	@Autowired

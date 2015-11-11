@@ -19,37 +19,37 @@ import java.io.Serializable;
 
 public class JsonResponse implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private int status;
-	private String message = "";
-	private String location = "";
+    private int status;
+    private String message = "";
+    private String location = "";
 
-	public String getLocation() {
-		return location;
-	}
+    public JsonResponse() {
 
-	public void setLocation(String location) {
-		this.location = location;
-	}
+    }
 
-	public int getStatus() {
-		return status;
-	}
+    public String getLocation() {
+        return location;
+    }
 
-	public void setStatus(int status) {
-		this.status = status;
-	}
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public int getStatus() {
+        return status;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
-	public JsonResponse() {
+    public String getMessage() {
+        return message;
+    }
 
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

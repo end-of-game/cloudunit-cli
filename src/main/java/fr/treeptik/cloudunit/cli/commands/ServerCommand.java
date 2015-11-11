@@ -14,38 +14,37 @@
  */
 package fr.treeptik.cloudunit.cli.commands;
 
+import fr.treeptik.cloudunit.cli.utils.ServerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.core.CommandMarker;
 import org.springframework.shell.core.annotation.CliCommand;
 import org.springframework.shell.core.annotation.CliOption;
 import org.springframework.stereotype.Component;
 
-import fr.treeptik.cloudunit.cli.utils.ServerUtils;
-
 @Component
 public class ServerCommand implements CommandMarker {
 
-	@Autowired
-	private ServerUtils serverUtils;
+    @Autowired
+    private ServerUtils serverUtils;
 
-	@CliCommand(value = "change-jvm-memory", help = "Change memory of the application server")
-	public String changeMemory(
-			@CliOption(key = { "size" }, mandatory = true, help = "Available memory size (Mo) {512, 1024, 2048, 3072}") String memorySize) {
-		return serverUtils.changeMemory(memorySize);
-	}
+    @CliCommand(value = "change-jvm-memory", help = "Change memory of the application server")
+    public String changeMemory(
+            @CliOption(key = {"size"}, mandatory = true, help = "Available memory size (Mo) {512, 1024, 2048, 3072}") String memorySize) {
+        return serverUtils.changeMemory(memorySize);
+    }
 
-	@CliCommand(value = "add-jvm-option", help = "Add a new java option to the application server")
-	public String addOpts(
-			@CliOption(key = { "" }, mandatory = true, help = "Add your jvm opts (excepted memory values) between \"\"") String opts) {
-		return serverUtils.addOpts(opts);
-	}
+    @CliCommand(value = "add-jvm-option", help = "Add a new java option to the application server")
+    public String addOpts(
+            @CliOption(key = {""}, mandatory = true, help = "Add your jvm opts (excepted memory values) between \"\"") String opts) {
+        return serverUtils.addOpts(opts);
+    }
 
-	@CliCommand(value = "change-java-version", help = "Change java version")
-	public String changeJavaVersion(
-			@CliOption(key = { "" }, mandatory = false, help = "Application name") String applicationName,
-			@CliOption(key = { "javaVersion" }, mandatory = true, help = "Choose your java version (available : jdk1.7.0_55 & jdk1.8.0_25)") String javaVersion) {
-		return serverUtils.changeJavaVersion(applicationName, javaVersion);
-	}
+    @CliCommand(value = "change-java-version", help = "Change java version")
+    public String changeJavaVersion(
+            @CliOption(key = {""}, mandatory = false, help = "Application name") String applicationName,
+            @CliOption(key = {"javaVersion"}, mandatory = true, help = "Choose your java version (available : jdk1.7.0_55 & jdk1.8.0_25)") String javaVersion) {
+        return serverUtils.changeJavaVersion(applicationName, javaVersion);
+    }
 
     // @CliCommand(value = "open-port", help = "Change java version")
     // public String openPort(

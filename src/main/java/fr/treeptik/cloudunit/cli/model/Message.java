@@ -15,115 +15,111 @@
 
 package fr.treeptik.cloudunit.cli.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 public class Message implements Serializable {
 
-	// Warnig : do not use SimpleDateFormat because threading issue
-	private static SimpleDateFormat DATE_FORMATER = new SimpleDateFormat(
-			"dd-MM-yyyy HH:mm:ss");
+    public static final String INFO = "INFO";
+    public static final String ERROR = "ERROR";
+    private static final long serialVersionUID = 1L;
+    // Warnig : do not use SimpleDateFormat because threading issue
+    private static SimpleDateFormat DATE_FORMATER = new SimpleDateFormat(
+            "dd-MM-yyyy HH:mm:ss");
+    private Integer id;
 
-	public static final String INFO = "INFO";
+    private Date date;
 
-	public static final String ERROR = "ERROR";
+    private User author;
 
-	private static final long serialVersionUID = 1L;
+    private String type;
 
-	private Integer id;
+    private String applicationName;
 
-	private Date date;
+    private String event;
 
-	private User author;
+    private String action;
 
-	private String type;
+    public Message() {
+        this.date = new Date();
+    }
 
-	private String applicationName;
+    public Message(Type type) {
+        this.date = new Date();
 
-	private String event;
+        this.type = type.name();
+    }
 
-	private String action;
+    @Override
+    public String toString() {
+        return "Message{" + "id=" + id + ", date=" + date + ", author="
+                + author + ", type='" + type + '\'' + ", applicationName='"
+                + applicationName + '\'' + ", event='" + event + '\''
+                + ", action='" + action + '\'' + '}';
+    }
 
-	public Message() {
-		this.date = new Date();
-	}
+    public String getAction() {
+        return "application.create";
+    }
 
-	@Override
-	public String toString() {
-		return "Message{" + "id=" + id + ", date=" + date + ", author="
-				+ author + ", type='" + type + '\'' + ", applicationName='"
-				+ applicationName + '\'' + ", event='" + event + '\''
-				+ ", action='" + action + '\'' + '}';
-	}
+    public void setAction(String action) {
+        this.action = action;
+    }
 
-	public String getAction() {
-		return "application.create";
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setAction(String action) {
-		this.action = action;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public Message(Type type) {
-		this.date = new Date();
+    public Date getDate() {
+        return date;
+    }
 
-		this.type = type.name();
-	}
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    @JsonIgnore
+    public String getDateAsString() {
+        return DATE_FORMATER.format(date);
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public String getEvent() {
+        return event;
+    }
 
-	public Date getDate() {
-		return date;
-	}
+    public void setEvent(String event) {
+        this.event = event;
+    }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+    public User getAuthor() {
+        return author;
+    }
 
-	@JsonIgnore
-	public String getDateAsString() {
-		return DATE_FORMATER.format(date);
-	}
+    public void setAuthor(User author) {
+        this.author = author;
+    }
 
-	public String getEvent() {
-		return event;
-	}
+    public String getApplicationName() {
+        return applicationName;
+    }
 
-	public void setEvent(String event) {
-		this.event = event;
-	}
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
 
-	public User getAuthor() {
-		return author;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setAuthor(User author) {
-		this.author = author;
-	}
-
-	public String getApplicationName() {
-		return applicationName;
-	}
-
-	public void setApplicationName(String applicationName) {
-		this.applicationName = applicationName;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
 }

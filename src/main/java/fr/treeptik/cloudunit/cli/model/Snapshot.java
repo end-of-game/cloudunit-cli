@@ -22,137 +22,135 @@ import java.util.Map;
 
 public class Snapshot implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Integer id;
+    private Integer id;
 
-	private String tag;
-	
-	private String description;
+    private String tag;
 
-	private String applicationName;
+    private String description;
 
-	private String type;
+    private String applicationName;
 
-	private String jvmRelease;
+    private String type;
 
-	private String jvmOptions;
+    private String jvmRelease;
 
-	private Long jvmMemory;
+    private String jvmOptions;
 
-	private User user;
+    private Long jvmMemory;
 
-	private Date date;
+    private User user;
 
-	private Map<String, String> appConfig;
+    private Date date;
 
-	private List<String> images;
-	
-	private String deploymentStatus;
+    private Map<String, String> appConfig;
 
-	public Integer getId() {
-		return id;
-	}
+    private List<String> images;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    private String deploymentStatus;
 
-	public String getTag() {
-		return tag;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public String getApplicationName() {
-		return applicationName;
-	}
+    public String getTag() {
+        return tag;
+    }
 
-	public void setApplicationName(String applicationName) {
-		this.applicationName = applicationName;
-	}
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public String getApplicationName() {
+        return applicationName;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
 
-	public Date getDate() {
-		return date;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	public Map<String, String> getAppConfig() {
-		return appConfig;
-	}
+    public Date getDate() {
+        return date;
+    }
 
-	public void setAppConfig(Map<String, String> appConfig) {
-		this.appConfig = appConfig;
-	}
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
-	public List<String> getImages() {
-		return images;
-	}
+    public Map<String, String> getAppConfig() {
+        return appConfig;
+    }
 
-	public void setImages(List<String> images) {
-		this.images = images;
-	}
+    public void setAppConfig(Map<String, String> appConfig) {
+        this.appConfig = appConfig;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public List<String> getImages() {
+        return images;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
 
-	public String getJvmRelease() {
-		return jvmRelease;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setJvmRelease(String jvmRelease) {
-		this.jvmRelease = jvmRelease;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public String getJvmOptions() {
-		return jvmOptions;
-	}
+    public String getJvmRelease() {
+        return jvmRelease;
+    }
 
-	public void setJvmOptions(String jvmOptions) {
-		this.jvmOptions = jvmOptions;
-	}
+    public void setJvmRelease(String jvmRelease) {
+        this.jvmRelease = jvmRelease;
+    }
 
-	public Long getJvmMemory() {
-		return jvmMemory;
-	}
+    public String getJvmOptions() {
+        return jvmOptions;
+    }
 
-	public void setJvmMemory(Long jvmMemory) {
-		this.jvmMemory = jvmMemory;
-	}
+    public void setJvmOptions(String jvmOptions) {
+        this.jvmOptions = jvmOptions;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public Long getJvmMemory() {
+        return jvmMemory;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setJvmMemory(Long jvmMemory) {
+        this.jvmMemory = jvmMemory;
+    }
 
-    public String getDeploymentStatus()
-    {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDeploymentStatus() {
         return deploymentStatus;
     }
 
-    public void setDeploymentStatus( String deploymentStatus )
-    {
+    public void setDeploymentStatus(String deploymentStatus) {
         this.deploymentStatus = deploymentStatus;
     }
 
