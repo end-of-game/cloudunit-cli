@@ -56,6 +56,8 @@ public class User implements Serializable {
 
     private String isAllowed;
 
+    private String clearedPassword;
+
     public User() {
 
     }
@@ -177,6 +179,14 @@ public class User implements Serializable {
 
     public void setIsAllowed(String isAllowed) {
         this.isAllowed = isAllowed;
+    }
+
+    public String getClearedPassword() {
+        return this.clearedPassword;
+    }
+
+    public void setClearedPassword(String clearedPassword) {
+        this.clearedPassword = clearedPassword;
     }
 
     @Override
