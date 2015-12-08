@@ -30,6 +30,7 @@ public class FileUnit implements Serializable {
     private boolean dir;
     private boolean exec;
     private String breadcrump;
+    private boolean removable;
 
     public FileUnit() {
     }
@@ -106,4 +107,15 @@ public class FileUnit implements Serializable {
         this.breadcrump = breadcrump;
     }
 
+    public boolean isRemovable() {
+        return removable;
+    }
+
+    public void setRemovable(boolean removable) {
+        this.removable = removable;
+    }
+
+    public void setBreadcrump(String breadcrump) {
+        this.breadcrump = breadcrump;
+    }
 }

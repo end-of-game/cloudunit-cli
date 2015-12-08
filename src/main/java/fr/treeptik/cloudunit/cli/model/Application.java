@@ -76,6 +76,9 @@ public class Application
 
     private boolean isAClone;
 
+    private List<PortToOpen> portsToOpen;
+
+
     public Application() {
     }
 
@@ -245,6 +248,15 @@ public class Application
     public void setDeploymentStatus(String deploymentStatus) {
         this.deploymentStatus = deploymentStatus;
     }
+
+    public List<PortToOpen> getPortsToOpen() {
+        return portsToOpen;
+    }
+
+    public void setPortsToOpen(List<PortToOpen> portsToOpen) {
+        this.portsToOpen = portsToOpen;
+    }
+
 
     @Override
     public String toString() {

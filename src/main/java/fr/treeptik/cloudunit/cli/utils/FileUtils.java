@@ -113,7 +113,7 @@ public class FileUtils {
         }
 
         clPromptProvider.setPrompt("cloudunit>[" + containerName + "] ");
-        currentPath = "/cloudunit";
+        currentPath = "__cloudunit__";
 
         return null;
     }
