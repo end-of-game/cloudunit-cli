@@ -22,6 +22,7 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class Application
         implements Serializable {
@@ -60,6 +61,16 @@ public class Application
      * Suffixe du domaine des applications déployées Ce champ est dynamique à travers le profil maven
      */
     private String suffixCloudUnitIO;
+
+    private Set<PortToOpen> portsToOpen;
+
+    public Set<PortToOpen> getPortsToOpen() {
+        return portsToOpen;
+    }
+
+    public void setPortsToOpen(Set<PortToOpen> portsToOpen) {
+        this.portsToOpen = portsToOpen;
+    }
 
     /**
      * prefixe du domaine de l'url de phpMyAdmin Ce champ est dynamique à travers le profil maven
@@ -245,6 +256,7 @@ public class Application
     public void setDeploymentStatus(String deploymentStatus) {
         this.deploymentStatus = deploymentStatus;
     }
+
 
     @Override
     public String toString() {

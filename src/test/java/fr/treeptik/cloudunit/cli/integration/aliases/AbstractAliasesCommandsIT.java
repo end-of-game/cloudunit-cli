@@ -19,7 +19,7 @@ public abstract class AbstractAliasesCommandsIT extends AbstractShellIntegration
 
     private static String applicationName;
     protected String serverType;
-    private String alias = "myalias";
+    private String alias = "myalias.cloudunit.dev";
 
     @BeforeClass
     public static void generateApplication() {
