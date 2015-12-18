@@ -50,6 +50,8 @@ public class Snapshot implements Serializable {
 
     private String deploymentStatus;
 
+    private List<String> savedPorts;
+
     public Integer getId() {
         return id;
     }
@@ -154,4 +156,7 @@ public class Snapshot implements Serializable {
         this.deploymentStatus = deploymentStatus;
     }
 
+    public List<String> getSavedPorts() {
+        return savedPorts;
+    }
 }
