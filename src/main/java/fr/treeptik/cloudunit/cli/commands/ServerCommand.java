@@ -46,12 +46,19 @@ public class ServerCommand implements CommandMarker {
         return serverUtils.changeJavaVersion(applicationName, javaVersion);
     }
 
-    // @CliCommand(value = "open-port", help = "Change java version")
-    // public String openPort(
-    // @CliOption(key = { "", "name" }, mandatory = false, help = "Application name") String applicationName,
-    // @CliOption(key = { "port" }, mandatory = true, help = "Choose a port to open") String portToOpen,
-    // @CliOption(key = { "alias" }, mandatory = true, help = "Choose an alias to access to this port") String alias) {
-    // return serverUtils.openPort(applicationName, portToOpen, alias);
-    // }
+    @CliCommand(value = "open-port", help = "Change java version")
+    public String openPort(
+            @CliOption(key = {"", "name"}, mandatory = false, help = "Application name") String applicationName,
+            @CliOption(key = {"port"}, mandatory = true, help = "Choose a port to open") String portToOpen,
+            @CliOption(key = {"nature"}, mandatory = true, help = "Choose a port to open") String portNature) {
+        return serverUtils.openPort(applicationName, portToOpen, portNature);
+    }
+
+    @CliCommand(value = "remove-port", help = "Change java version")
+    public String openPort(
+            @CliOption(key = {"", "name"}, mandatory = false, help = "Application name") String applicationName,
+            @CliOption(key = {"port"}, mandatory = true, help = "Choose a port to open") String portToOpen) {
+        return serverUtils.removePort(applicationName, portToOpen);
+    }
 
 }

@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Component
@@ -176,19 +175,9 @@ public class ServerUtils
      *
      * @param applicationName
      * @param portToOpen
-     * @param alias
      * @return
      */
-    public String openPort(String applicationName, String portToOpen, String alias) {
-
-        try {
-            Integer.parseInt(portToOpen);
-
-        } catch (NumberFormatException e) {
-            log.log(Level.SEVERE, "The port is not correct");
-            statusCommand.setExitStatut(1);
-            return null;
-        }
+    public String openPort(String applicationName, String portToOpen, String portNature) {
 
         String checkResponse = applicationUtils.checkAndRejectIfError(applicationName);
 
@@ -201,18 +190,15 @@ public class ServerUtils
         } else {
             applicationName = applicationUtils.getApplication().getName();
         }
-        if (Integer.parseInt(portToOpen) < 1024) {
-            statusCommand.setExitStatut(1);
-            return ANSIConstants.ANSI_RED + "You must open a port bigger than 1024" + ANSIConstants.ANSI_RESET;
-        }
 
         Map<String, String> parameters = new HashMap<>();
         parameters.put("applicationName", applicationUtils.getApplication().getName());
         parameters.put("portToOpen", portToOpen);
-        parameters.put("alias", alias);
+        parameters.put("portNature", portNature);
+
 
         try {
-            restUtils.sendPostCommand(authentificationUtils.finalHost + "/server/ports/open",
+            restUtils.sendPostCommand(authentificationUtils.finalHost + "/application/ports",
                     authentificationUtils.getMap(), parameters).get("body");
         } catch (ManagerResponseException e) {
             statusCommand.setExitStatut(1);
@@ -222,6 +208,43 @@ public class ServerUtils
         statusCommand.setExitStatut(0);
 
         return "The port " + portToOpen + " was been successfully opened on " + applicationUtils.getApplication().getName();
+    }
+
+    /**
+     * @param applicationName
+     * @param portToOpen
+     * @return
+     */
+    public String removePort(String applicationName, String portToOpen) {
+
+        String checkResponse = applicationUtils.checkAndRejectIfError(applicationName);
+
+        if (checkResponse != null) {
+            return checkResponse;
+        }
+
+        if (applicationName != null) {
+            applicationUtils.useApplication(applicationName);
+        } else {
+            applicationName = applicationUtils.getApplication().getName();
+        }
+
+
+        try {
+            restUtils.sendDeleteCommand(authentificationUtils.finalHost
+                            + "/application/"
+                            + applicationName
+                            + "/ports/"
+                            + portToOpen,
+                    authentificationUtils.getMap()).get("body");
+        } catch (ManagerResponseException e) {
+            statusCommand.setExitStatut(1);
+            return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
+        }
+
+        statusCommand.setExitStatut(0);
+
+        return "The port " + portToOpen + " was been successfully closed on " + applicationUtils.getApplication().getName();
     }
 
 }
