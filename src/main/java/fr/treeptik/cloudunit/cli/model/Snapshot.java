@@ -28,6 +28,8 @@ public class Snapshot implements Serializable {
 
     private String tag;
 
+    private String cuInstanceName;
+
     private String description;
 
     private String applicationName;
@@ -66,6 +68,14 @@ public class Snapshot implements Serializable {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public String getCuInstanceName() {
+        return cuInstanceName;
+    }
+
+    public void setCuInstanceName(String cuInstanceName) {
+        this.cuInstanceName = cuInstanceName;
     }
 
     public String getApplicationName() {

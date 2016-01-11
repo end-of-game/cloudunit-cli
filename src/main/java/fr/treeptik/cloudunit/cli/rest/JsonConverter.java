@@ -22,6 +22,7 @@ import org.codehaus.jackson.type.TypeReference;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class JsonConverter {
 
@@ -67,6 +68,18 @@ public class JsonConverter {
             e.printStackTrace();
         }
         return user;
+    }
+
+    public static String getCloudUnitInstance(String response) {
+        String cloudunitInstance = null;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            Map<String, String> map = mapper.readValue(response, new TypeReference<Map<String, String>>(){});
+            cloudunitInstance = map.get("cuInstanceName");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return cloudunitInstance;
     }
 
     public static List<Application> getApplications(String response) {

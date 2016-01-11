@@ -33,6 +33,8 @@ public class Application
 
     private String name;
 
+    private String cuInstanceName;
+
     private Status status;
 
     private String location;
@@ -104,6 +106,14 @@ public class Application
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCuInstanceName() {
+        return cuInstanceName;
+    }
+
+    public void setCuInstanceName(String cuInstanceName) {
+        this.cuInstanceName = cuInstanceName;
     }
 
     /**

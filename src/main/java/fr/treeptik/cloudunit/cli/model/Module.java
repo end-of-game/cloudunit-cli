@@ -27,6 +27,8 @@ public class Module extends Container implements Serializable {
 
     private String managerLocation;
 
+    private String cuInstanceName;
+
     public Module() {
     }
 
@@ -44,6 +46,14 @@ public class Module extends Container implements Serializable {
 
     public void setManagerLocation(String managerLocation) {
         this.managerLocation = managerLocation;
+    }
+
+    public String getCuInstanceName() {
+        return cuInstanceName;
+    }
+
+    public void setCuInstanceName(String cuInstanceName) {
+        this.cuInstanceName = cuInstanceName;
     }
 
     @Override

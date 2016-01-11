@@ -18,6 +18,7 @@ package fr.treeptik.cloudunit.cli.utils;
 import fr.treeptik.cloudunit.cli.commands.ShellStatusCommand;
 import fr.treeptik.cloudunit.cli.exception.ManagerResponseException;
 import fr.treeptik.cloudunit.cli.processor.InjectLogger;
+import fr.treeptik.cloudunit.cli.rest.JsonConverter;
 import fr.treeptik.cloudunit.cli.rest.RestUtils;
 import fr.treeptik.cloudunit.cli.shell.CloudUnitPromptProvider;
 import jline.console.ConsoleReader;
@@ -109,8 +110,20 @@ public class AuthentificationUtils {
             String urlToCall = finalHost + urlLoader.connect;
             restUtils.connect(urlToCall, loginInfo).get("body");
             applicationUtils.setApplication(null);
-            resetPrompt();
 
+            String response = null;
+            String cloudunitInstance = "";
+            try {
+                response = restUtils.sendGetCommand(finalHost + urlLoader.getCloudUnitInstance, null).get("body");
+                cloudunitInstance = JsonConverter.getCloudUnitInstance(response);
+                if (cloudunitInstance != null) {
+                    cloudunitInstance = "-" + cloudunitInstance;
+                }
+                clPromptProvider.setCuInstanceName(cloudunitInstance);
+            } catch (ManagerResponseException e) {
+                statusCommand.setExitStatut(1);
+                return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
+            }
 
         } catch (ManagerResponseException e) {
             statusCommand.setExitStatut(1);
@@ -182,7 +195,7 @@ public class AuthentificationUtils {
         } catch (ManagerResponseException e) {
             return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
         }
-        resetPrompt();
+        clPromptProvider.setCuInstanceName("");
 
         return "Disconnect";
 
@@ -194,10 +207,6 @@ public class AuthentificationUtils {
 
     public void setMap(Map<String, Object> map) {
         this.map = map;
-    }
-
-    public void resetPrompt() {
-        clPromptProvider.setPrompt("cloudunit> ");
     }
 
 }
