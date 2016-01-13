@@ -39,6 +39,8 @@ public class Message implements Serializable {
 
     private String applicationName;
 
+    private String cuInstanceName;
+
     private String event;
 
     private String action;
@@ -112,6 +114,14 @@ public class Message implements Serializable {
 
     public void setApplicationName(String applicationName) {
         this.applicationName = applicationName;
+    }
+
+    public String getCuInstanceName() {
+        return cuInstanceName;
+    }
+
+    public void setCuInstanceName(String cuInstanceName) {
+        this.cuInstanceName = cuInstanceName;
     }
 
     public String getType() {

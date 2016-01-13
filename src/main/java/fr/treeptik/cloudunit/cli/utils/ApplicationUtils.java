@@ -22,6 +22,7 @@ import fr.treeptik.cloudunit.cli.processor.InjectLogger;
 import fr.treeptik.cloudunit.cli.rest.JsonConverter;
 import fr.treeptik.cloudunit.cli.rest.RestUtils;
 import fr.treeptik.cloudunit.cli.shell.CloudUnitPromptProvider;
+import jline.console.ConsoleReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
@@ -36,9 +37,12 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class ApplicationUtils {
@@ -71,8 +75,6 @@ public class ApplicationUtils {
     private FileUtils fileUtils;
 
     private Application application;
-
-    private Integer loop = 0;
 
     public String getInformations() {
         String checkResponse = checkAndRejectIfError(null);
@@ -118,7 +120,7 @@ public class ApplicationUtils {
 
         moduleUtils.setApplicationName(applicationName);
         setApplication(JsonConverter.getApplication(json));
-        clPromptProvider.setPrompt("cloudunit-" + applicationName + "> ");
+        clPromptProvider.setApplicationName("-" + applicationName);
         return "Current application : " + getApplication().getName();
     }
 
@@ -173,24 +175,15 @@ public class ApplicationUtils {
 
     public String rmApp(String applicationName, Boolean scriptUsage) {
 
-        String response = null;
-        String confirmation = "";
-
-        if (loop == 0) {
-            String checkResponse = checkAndRejectIfError(applicationName);
-            if (checkResponse != null) {
-                return checkResponse;
-            }
-            if (application == null) {
-
-                statusCommand.setExitStatut(1);
-                return ANSIConstants.ANSI_RED
-                        + "No application is currently selected by the following command line : use <application name>"
-                        + ANSIConstants.ANSI_RESET;
-            }
+        // Check if application is eligble
+        String checkResponse = checkAndRejectIfError(applicationName);
+        if (checkResponse != null) {
+            statusCommand.setExitStatut(1);
+            return checkResponse;
         }
 
         // Enter the non interactive mode (for script)
+        String response = null;
         if (scriptUsage) {
             try {
                 restUtils.sendDeleteCommand(
@@ -198,89 +191,69 @@ public class ApplicationUtils {
                                 + urlLoader.actionApplication
                                 + application.getName(),
                         authentificationUtils.getMap()).get("body");
-            } catch (ManagerResponseException e) {
-                statusCommand.setExitStatut(1);
-                return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
-            }
-            response = "Your application " + application.getName()
-                    + " is currently being removed";
-            resetPrompt();
-            statusCommand.setExitStatut(0);
-            setApplication(null);
-            return response;
-        }
-
-        // for human users
-
-        if (loop <= 3) {
-            loop++;
-            Scanner scanner = new Scanner(System.in);
-            log.log(Level.WARNING,
-                    "Confirm the suppression of your application : "
-                            + application.getName()
-                            + " - (yes/y or no/n)");
-            confirmation = scanner.nextLine();
-            try {
-
-                switch (confirmation.toLowerCase()) {
-                    case "yes":
-                    case "y":
-                        restUtils.sendDeleteCommand(
-                                authentificationUtils.finalHost
-                                        + urlLoader.actionApplication
-                                        + application.getName(),
-                                authentificationUtils.getMap()).get("body");
-
-                        response = "Your application "
-                                + application.getName()
-                                + " is currently being removed";
-                        resetPrompt();
-                        statusCommand.setExitStatut(0);
-                        break;
-
-                    case "no":
-                    case "n":
-                        setApplication(null);
-                        resetPrompt();
-                        statusCommand.setExitStatut(0);
-
-                        break;
-
-                    default:
-
-                        if (loop >= 3) {
-                            setApplication(null);
-                            resetPrompt();
-                            loop = 0;
-                            scanner.close();
-                            return ANSIConstants.ANSI_PURPLE +
-                                    "sorry 3 tries is the limit, you seem too tired to take a decision so important as delete an application, take a break !!!"
-                                    + ANSIConstants.ANSI_RESET;
-                        }
-                        log.log(Level.SEVERE,
-                                "confirmation response are yes/y or no/n ");
-                        scanner.close();
-                        return rmApp(applicationName, scriptUsage);
-                }
+                response = "Your application " + application.getName() + " is currently being removed";
+                statusCommand.setExitStatut(0);
             } catch (ResourceAccessException e) {
                 statusCommand.setExitStatut(1);
-                scanner.close();
-                return ANSIConstants.ANSI_RED +
+                response = ANSIConstants.ANSI_RED +
                         "The CLI can't etablished connexion with host servers. Please try later or contact an admin"
                         + ANSIConstants.ANSI_RESET;
             } catch (ManagerResponseException e) {
                 statusCommand.setExitStatut(1);
-                scanner.close();
-                return ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
+                response = ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
+            } finally {
+                clPromptProvider.setApplicationName("");
+                setApplication(null);
             }
+            return response;
+        }
 
+        // For human interactive mode
+        try {
+            log.log(Level.WARNING,
+                    "Confirm the suppression of your application: " + application.getName() + " - (yes/y) or (no/n)");
+            String confirmation = new ConsoleReader().readLine();
+            confirmation = confirmation.toLowerCase();
+
+            switch (confirmation) {
+                case "yes":
+                case "y":
+                    restUtils.sendDeleteCommand(
+                            authentificationUtils.finalHost
+                                    + urlLoader.actionApplication
+                                    + application.getName(),
+                            authentificationUtils.getMap()).get("body");
+
+
+                    response = "Your application " + application.getName() + " is currently being removed";
+                    statusCommand.setExitStatut(0);
+                    break;
+
+                case "no":
+                case "n":
+                    statusCommand.setExitStatut(0);
+                    break;
+                default:
+                    log.log(Level.SEVERE, "Confirmation response is (yes/y) or (no/n) ");
+                    return rmApp(applicationName, scriptUsage);
+            }
+        } catch (ResourceAccessException e) {
+            statusCommand.setExitStatut(1);
+            response = ANSIConstants.ANSI_RED +
+                    "The CLI can't etablished connexion with host servers. Please try later or contact an admin"
+                    + ANSIConstants.ANSI_RESET;
+        } catch (ManagerResponseException e) {
+            statusCommand.setExitStatut(1);
+            response = ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
+        } catch (IOException e) {
+            statusCommand.setExitStatut(1);
+            response = ANSIConstants.ANSI_RED + e.getMessage() + ANSIConstants.ANSI_RESET;
+        } finally {
             setApplication(null);
-            scanner.close();
-            loop = 0;
+            clPromptProvider.setApplicationName("");
         }
 
         return response;
-
     }
 
     public String startApp(String applicationName) {
@@ -529,10 +502,6 @@ public class ApplicationUtils {
 
     public void setApplication(Application application) {
         this.application = application;
-    }
-
-    public void resetPrompt() {
-        clPromptProvider.setPrompt("cloudunit> ");
     }
 
     public String checkAndRejectIfError(String applicationName) {
