@@ -33,7 +33,15 @@ public class Application
 
     private String name;
 
+    /**
+     * CloudUnit instance name (e.g. DEV, QA, PROD).
+     */
     private String cuInstanceName;
+
+    /**
+     * Origin property issue from snapshot when created by clone process.
+     */
+    private String origin;
 
     private Status status;
 
@@ -114,6 +122,14 @@ public class Application
 
     public void setCuInstanceName(String cuInstanceName) {
         this.cuInstanceName = cuInstanceName;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
 
     /**

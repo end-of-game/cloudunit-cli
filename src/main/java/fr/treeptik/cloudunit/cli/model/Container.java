@@ -39,10 +39,7 @@ public class Container
     protected Long memorySize;
     protected String containerIP;
     protected List<PortToOpen> portsToOpen;
-    /**
-     * This is the docker state of the container containing the server : Running, Ghost, or Stopped
-     */
-    protected String dockerState;
+
     /**
      * This is the applicative status of the server START, STOP, PENDING when it's being modified and not yet in
      * operational state or FAIL if a problem has been detected on this server.
@@ -111,14 +108,6 @@ public class Container
 
     public void setContainerIP(String containerIP) {
         this.containerIP = containerIP;
-    }
-
-    public String getDockerState() {
-        return dockerState;
-    }
-
-    public void setDockerState(String dockerState) {
-        this.dockerState = dockerState;
     }
 
     public Status getStatus() {
