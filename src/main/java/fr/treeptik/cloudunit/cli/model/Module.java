@@ -61,7 +61,7 @@ public class Module extends Container implements Serializable {
         return "Module [id=" + id + ", startDate=" + startDate + ", name="
                 + name + ", cloudId=" + containerID + ", memorySize="
                 + memorySize + ", containerID=" + containerIP
-                + ", dockerState=" + dockerState + ", moduleInfos="
+                + ", moduleInfos="
                 + moduleInfos + ", listPorts=" + listPorts + ", image=" + image
                 + ", status=" + status + "]";
     }
