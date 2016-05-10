@@ -35,6 +35,24 @@ public class Image implements Serializable {
     private String status;
     private String imageType;
     private String managerName;
+    private String displayName;
+    private String prefixEnv;
+
+    public String getPrefixEnv() {
+        return prefixEnv;
+    }
+
+    public void setPrefixEnv(String prefixEnv) {
+        this.prefixEnv = prefixEnv;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 
     @JsonIgnore
     private List<Module> modules;
