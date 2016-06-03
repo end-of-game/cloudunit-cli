@@ -27,7 +27,7 @@ mvn clean compile exec:java
 ## Run it with Docker
 
 ```
-docker run -it cloudunit/cli
+docker run --rm -it cloudunit/cli
 ```
 
 
