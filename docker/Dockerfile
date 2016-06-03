@@ -8,4 +8,4 @@ RUN git clone https://github.com/Treeptik/cloudunit-cli.git --depth 1
 WORKDIR /usr/src/app/cloudunit-cli
 RUN mvn clean package -DskipTests
 
-CMD ["java -jar target/CloudUnitCLI.jar"]
+ENTRYPOINT java -jar target/CloudUnitCLI.jar
