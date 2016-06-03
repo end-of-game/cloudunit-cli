@@ -33,6 +33,16 @@ public class Application
 
     private String name;
 
+    private String displayName;
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     /**
      * CloudUnit instance name (e.g. DEV, QA, PROD).
      */

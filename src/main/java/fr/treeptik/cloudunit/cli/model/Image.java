@@ -36,6 +36,16 @@ public class Image implements Serializable {
     private String imageType;
     private String managerName;
     private String displayName;
+
+    public String getPrefixId() {
+        return prefixId;
+    }
+
+    public void setPrefixId(String prefixId) {
+        this.prefixId = prefixId;
+    }
+
+    private String prefixId;
     private String prefixEnv;
 
     public String getPrefixEnv() {
