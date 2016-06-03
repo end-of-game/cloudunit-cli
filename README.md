@@ -23,6 +23,14 @@ cd CloudUnit-CLI
 mvn clean compile exec:java
 
 ```
+
+## Run it with Docker
+
+```
+docker run -it cloudunit/cli
+```
+
+
 ##License
 
 All the source code is licensed under GNU AFFERO GENERAL PUBLIC LICENSE. License is available [here](https://github.com/Treeptik/CloudUnit/blob/master/LICENSE) but CloudUnit is licensed too under a standard commercial license. Please contact our sales team if you would like to discuss the specifics of our Enterprise license. If you are not sure whether the AGPL is right for you, you can always test our software under the AGPL and inspect the source code before you contact us about purchasing a commercial license.
