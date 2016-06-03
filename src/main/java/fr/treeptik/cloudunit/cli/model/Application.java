@@ -22,6 +22,7 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class Application
         implements Serializable {
@@ -31,6 +32,26 @@ public class Application
     private Integer id;
 
     private String name;
+
+    private String displayName;
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    /**
+     * CloudUnit instance name (e.g. DEV, QA, PROD).
+     */
+    private String cuInstanceName;
+
+    /**
+     * Origin property issue from snapshot when created by clone process.
+     */
+    private String origin;
 
     private Status status;
 
@@ -60,6 +81,16 @@ public class Application
      * Suffixe du domaine des applications déployées Ce champ est dynamique à travers le profil maven
      */
     private String suffixCloudUnitIO;
+
+    private Set<PortToOpen> portsToOpen;
+
+    public Set<PortToOpen> getPortsToOpen() {
+        return portsToOpen;
+    }
+
+    public void setPortsToOpen(Set<PortToOpen> portsToOpen) {
+        this.portsToOpen = portsToOpen;
+    }
 
     /**
      * prefixe du domaine de l'url de phpMyAdmin Ce champ est dynamique à travers le profil maven
@@ -93,6 +124,22 @@ public class Application
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCuInstanceName() {
+        return cuInstanceName;
+    }
+
+    public void setCuInstanceName(String cuInstanceName) {
+        this.cuInstanceName = cuInstanceName;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
 
     /**
@@ -245,6 +292,7 @@ public class Application
     public void setDeploymentStatus(String deploymentStatus) {
         this.deploymentStatus = deploymentStatus;
     }
+
 
     @Override
     public String toString() {

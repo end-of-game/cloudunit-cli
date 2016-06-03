@@ -19,7 +19,7 @@ public abstract class AbstractAliasesCommandsIT extends AbstractShellIntegration
 
     private static String applicationName;
     protected String serverType;
-    private String alias = "myalias";
+    private String alias = "myalias.cloudunit.dev";
 
     @BeforeClass
     public static void generateApplication() {
@@ -31,7 +31,7 @@ public abstract class AbstractAliasesCommandsIT extends AbstractShellIntegration
         CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
         cr = getShell().executeCommand("create-app --name " + applicationName + " --type " + serverType);
         cr = getShell().executeCommand("use " + applicationName);
-        cr = getShell().executeCommand("add-alias --alias " + alias + "1");
+        cr = getShell().executeCommand("add-alias --alias " + alias);
         String result = cr.getResult().toString();
         String expectedResult = "An alias has been successfully added to " + applicationName.toLowerCase();
         Assert.assertEquals(expectedResult, result);
@@ -41,7 +41,7 @@ public abstract class AbstractAliasesCommandsIT extends AbstractShellIntegration
     public void test01_shoulAliasRemovingForbiddenExpression() {
         CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
         cr = getShell().executeCommand("use " + applicationName);
-        cr = getShell().executeCommand("add-alias --alias https://" + alias);
+        cr = getShell().executeCommand("add-alias --alias https://" + alias + ".eu");
         String result = cr.getResult().toString();
         String expectedResult = "An alias has been successfully added to " + applicationName.toLowerCase();
         Assert.assertEquals(expectedResult, result);
@@ -106,7 +106,7 @@ public abstract class AbstractAliasesCommandsIT extends AbstractShellIntegration
     public void test20_shoudRemoveAliasWithArgs() {
         CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
         cr = getShell().executeCommand("use " + applicationName);
-        cr = getShell().executeCommand("rm-alias --alias " + alias + "1");
+        cr = getShell().executeCommand("rm-alias --alias " + alias);
         String result = cr.getResult().toString();
         String expectedResult = "This alias has successful been deleted";
         Assert.assertEquals(expectedResult, result);

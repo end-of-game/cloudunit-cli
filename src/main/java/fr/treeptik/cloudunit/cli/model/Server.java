@@ -31,7 +31,7 @@ public class Server extends Container implements Serializable {
     private String jvmRelease;
 
     public Server(Integer id, Date startDate, String name, String containerID,
-                  Long memorySize, String containerIP, String dockerState,
+                  Long memorySize, String containerIP,
                   Status status, Image image, Map<String, String> listPorts,
                   List<String> links) {
         super();
@@ -41,7 +41,6 @@ public class Server extends Container implements Serializable {
         this.containerID = containerID;
         this.memorySize = memorySize;
         this.containerIP = containerIP;
-        this.dockerState = dockerState;
         this.status = status;
         this.image = image;
     }
@@ -87,7 +86,7 @@ public class Server extends Container implements Serializable {
         return "Server [id=" + id + ", startDate=" + startDate + ", name="
                 + name + ", containerID=" + containerID + ", memorySize="
                 + memorySize + ", containerIP=" + containerIP
-                + ", dockerState=" + dockerState + ", image=" + image
+                + ", image=" + image
                 + ", status=" + status + "]";
     }
 

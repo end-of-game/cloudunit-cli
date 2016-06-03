@@ -82,6 +82,9 @@ public class UrlLoader {
     @Value("${user.connect}")
     public String connect;
 
+    @Value("${user.getcloudunit.instance}")
+    public String getCloudUnitInstance;
+
     // admin prefix
 
     @Value("${admin}")

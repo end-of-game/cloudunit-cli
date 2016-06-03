@@ -28,6 +28,8 @@ public class PortToOpen implements Serializable {
 
     private String alias;
 
+    private String nature;
+
     public PortToOpen() {
     }
 
@@ -60,5 +62,12 @@ public class PortToOpen implements Serializable {
         this.alias = alias;
     }
 
+    public String getNature() {
+        return nature;
+    }
+
+    public void setNature(String nature) {
+        this.nature = nature;
+    }
 }
 
