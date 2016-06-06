@@ -110,6 +110,20 @@ public class ModuleUtils {
             return checkResponse;
         }
 
+        if(applicationUtils.getApplication().getModules().size() == 0) {
+            return "The application " + applicationUtils.getApplication().getName() + " doesn't have any module.";
+        }
+
+        Boolean exists = false;
+        for (Module module : applicationUtils.getApplication().getModules()) {
+            if(module.getName().endsWith(moduleName)) {
+                exists = true;
+            }
+        }
+
+        if(exists == false) {
+            return "The application " + applicationUtils.getApplication().getName() + " doesn't have this module.";
+        }
 
         for (Module module : applicationUtils.getApplication().getModules()) {
 
