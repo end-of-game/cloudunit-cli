@@ -38,7 +38,7 @@ public class SnapshotCommands implements CommandMarker {
         return snapshotUtils.createSnapshot(tag, applicationName);
     }
 
-    @CliCommand(value = "rm-snapshot", help = "Create a new snapshot for the current application")
+    @CliCommand(value = "rm-snapshot", help = "Remove a snapshot for the current application")
     public String deleteSnapshot(
             @CliOption(key = {"tag"}, mandatory = true, help = "You must name your snapshot") String tag) {
         return snapshotUtils.deleteSnapshot(tag);

@@ -27,12 +27,16 @@ public class Snapshot implements Serializable {
     private Integer id;
 
     private String tag;
+    
+    private String displayTag;
 
     private String cuInstanceName;
 
     private String description;
 
     private String applicationName;
+    
+    private String applicationDisplayName;
 
     private String type;
 
@@ -69,6 +73,14 @@ public class Snapshot implements Serializable {
     public void setTag(String tag) {
         this.tag = tag;
     }
+    
+    public String getDisplayTag() {
+        return displayTag;
+    }
+
+    public void setDisplayTag(String displayTag) {
+        this.displayTag = displayTag;
+    }
 
     public String getCuInstanceName() {
         return cuInstanceName;
@@ -84,6 +96,14 @@ public class Snapshot implements Serializable {
 
     public void setApplicationName(String applicationName) {
         this.applicationName = applicationName;
+    }
+    
+    public String getApplicationDisplayName() {
+        return applicationDisplayName;
+    }
+
+    public void setApplicationDisplayName(String applicationDisplayName) {
+        this.applicationDisplayName = applicationDisplayName;
     }
 
     public User getUser() {
