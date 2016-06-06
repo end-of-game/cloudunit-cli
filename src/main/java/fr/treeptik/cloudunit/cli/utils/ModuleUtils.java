@@ -67,6 +67,7 @@ public class ModuleUtils {
         statusCommand.setExitStatut(0);
         MessageConverter.buildLightModuleMessage(
                 applicationUtils.getApplication(), dockerManagerIP);
+
         return applicationUtils.getApplication().getModules().size() + " modules found";
     }
 

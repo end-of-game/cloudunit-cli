@@ -158,7 +158,7 @@ public class MessageConverter {
         modulePorts.put("mongo-2-6", "27017");
 
         List<Module> modules = application.getModules();
-        if (modules.size() < 2) {
+        if (modules.size() < 1) {
             logger.log(Level.WARNING, "No modules found!");
         } else {
 
@@ -216,7 +216,7 @@ public class MessageConverter {
                                                String dockerManagerIP) {
 
         List<Module> modules = application.getModules();
-        if (modules.size() < 2) {
+        if (modules.size() < 1) {
             logger.log(Level.WARNING, "No modules found!");
         } else {
 
