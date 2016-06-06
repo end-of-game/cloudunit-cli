@@ -1,4 +1,4 @@
-# CloudUnit command line interface guide
+# CloudUnit-CLI guide
 
 This guide is for a user who want to use CloudUnit with command line interface.
 
@@ -30,7 +30,7 @@ docker run --rm -it cloudunit/cli
 
 ## Help
 
-When the application is running, you can access to help with the command *help*. This will display all commands available in CloudUnit CLI.
+When the application is running, you can access to help with the command *help*. This command will display all commands available in CloudUnit-CLI.
 ```bash
 cloudunit-cli> help
 ```
@@ -87,7 +87,7 @@ Enter your password :
 Trying to connect to default CloudUnit host...
 Connection established
 ```
-Now you are in the DEV environment.
+Now you are in the DEV context.
 
 ## Application features
 
@@ -98,7 +98,7 @@ You can create an application with the command :
 cloudunit-DEV> create-app --name name --type tomcat-7
 Your application myapp is currently being installed
 ```
-After this command, you are in the application environment.
+After this command, you are in the application context.
 
 ### Remove
 
@@ -111,7 +111,7 @@ yes
 Your application test is currently being removed
 ```
 
-### Change control
+### Change context
 
 When you have two or more applications created on CloudUnit, you can take control of an application with the command :
 
@@ -122,7 +122,7 @@ Current application : myapp2
 
 ### Clone
 
-**For this feature, you must have already created a snapshot**
+**For this feature, you must have already created a snapshot.**
 You can clone an existing application :
 ```bash
 cloudunit-DEV-myapp>  clone --tag tag --applicationName myapp
@@ -131,7 +131,7 @@ Your application myapp2 was successfully created.
 
 ### Display
 
-You can display all informations about the current applications :
+You can display all informations about the current application :
 ```bash
 cloudunit-DEV-myapp>  informations
 
@@ -200,7 +200,7 @@ Your application myapp is currently being started
 
 #### Stop
 
-After your application was started, you can stop it with *stop* command and its services :
+After your application was started, you can stop it and its services with *stop* command :
 ```bash
 cloudunit-DEV-myapp>  stop
 Your application myapp is currently being stopped
@@ -231,7 +231,7 @@ This alias has successful been deleted
 
 #### Listing
 
-You can list all aliases of an applications : 
+You can list all aliases of an application : 
 ```bash
 cloudunit-DEV-myapp>  list-aliases 
 +---------------+
@@ -382,19 +382,6 @@ War deployed - Access on http://myapp-johndoe-admin.cloudunit.dev
 
 ## Globales features
 
-### Automating
-
-If you wanna execute some commands in a file, you can use the command *script* :
-```bash
-cloudunit-cli> script --file ../../Connect.sh
-connect --login johndoe --password abc2015
-Trying to connect to default CloudUnit host...
-Connection established
-Script required 0.731 seconds to execute
-```
-
-**You can only execute commands authorized by CloudUnit-CLI, not OS commands**
-
 ### Clear the console
 
 You can clear the console by two ways :
@@ -451,6 +438,18 @@ command is:echo "Hello World !"
 "Hello World !"
 ```
 
+### Automating
+
+If you wanna execute some commands in a file, you can use the command *script* :
+```bash
+cloudunit-cli> script --file ../../Connect.sh
+connect --login johndoe --password abc2015
+Trying to connect to default CloudUnit host...
+Connection established
+Script required 0.731 seconds to execute
+```
+**You can only execute commands available on CloudUnit-CLI, not OS commands.**
+
 ### Comments
 
 The *//* and *;* characters, if these characters start lines, allow to print comments : 
@@ -466,9 +465,9 @@ Your application myapp is currently being removed
 
 ### Exit the shell
 
-For exit the CloudUnit Command Line Interface and return the standard shell, you need to use this command : 
+For exit CloudUnit-CLI and return the standard shell, you need to use this command : 
 ```bash
-cloudunit-DEV-myapp5>  exit
+cloudunit-DEV-myapp>  exit
 ```
 
 You can use the command *quit* too : 
