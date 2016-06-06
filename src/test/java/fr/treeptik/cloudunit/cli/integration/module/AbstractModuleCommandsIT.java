@@ -102,7 +102,7 @@ public abstract class AbstractModuleCommandsIT extends AbstractShellIntegrationT
 
         cr = getShell().executeCommand("display-modules");
         result = cr.getResult().toString();
-        expectedResult = "2 modules found";
+        expectedResult = "1 modules found";
         Assert.assertEquals(expectedResult, result);
 
 

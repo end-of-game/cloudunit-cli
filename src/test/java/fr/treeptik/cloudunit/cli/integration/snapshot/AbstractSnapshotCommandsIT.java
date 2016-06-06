@@ -110,6 +110,8 @@ public abstract class AbstractSnapshotCommandsIT extends AbstractShellIntegratio
     @Test
     public void test30_shouldRemoveSnapshot() {
         CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
+        System.out.println("applicationName = " + applicationName);
+        getShell().executeCommand("rm-app --name " + applicationName.toLowerCase() + "cloned --scriptUsage" );
         cr = getShell().executeCommand("rm-snapshot --tag " + tagName);
         String result = cr.getResult().toString();
         String expectedResult = "The snapshot myTag was successfully deleted.";

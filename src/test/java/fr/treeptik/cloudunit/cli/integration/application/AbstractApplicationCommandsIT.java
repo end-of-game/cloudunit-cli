@@ -60,11 +60,11 @@ public abstract class AbstractApplicationCommandsIT extends AbstractShellIntegra
     }
 
     @Test
-    public void test04_shouldNotCreateApplicationBecauseNonAlphaNumericChars() {
+    public void test04_shouldNotCreateApplicationNonAlphaNumericCharsBecauseApplicationAlreadyExists() {
         CommandResult cr = getShell().executeCommand("connect --login johndoe --password abc2015");
         cr = getShell().executeCommand("create-app --name " + applicationName + "&~~ --type " + serverType);
         String result = cr.getResult().toString();
-        String expectedResult = "Application name is required and must have less than 15 chars (only alphanumerics)";
+        String expectedResult = "This application name already exists";
         Assert.assertTrue(result.contains(expectedResult));
     }
 
