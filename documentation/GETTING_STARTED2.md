@@ -382,6 +382,19 @@ War deployed - Access on http://myapp-johndoe-admin.cloudunit.dev
 
 ## Globales features
 
+### Automating
+
+If you wanna execute some commands in a file, you can use the command *script* :
+```bash
+cloudunit-cli> script --file ../../Connect.sh
+connect --login johndoe --password abc2015
+Trying to connect to default CloudUnit host...
+Connection established
+Script required 0.731 seconds to execute
+```
+
+**You can only execute commands authorized by CloudUnit-CLI, not OS commands**
+
 ### Clear the console
 
 You can clear the console by two ways :
