@@ -482,3 +482,21 @@ You can disconnect with the command *disconnect* :
 cloudunit-DEV-myapp>  disconnect
 Disconnect
 ```
+
+## Script exemple for create and deploy an application
+
+This is an exemple of script which connect to an account, create an application, download a git repository, package it and deploy it on CloudUnit-CLI :
+
+```bash
+connect --login johndoe --password abc2015
+create-app --name myapp --type tomcat-7
+! git clone https://github.com/Treeptik/cloudunit-webapp-examples.git
+! mvn clean package -f cloudunit-webapp-examples/spring-boot-mongodb/pom.xml
+deploy --path cloudunit-webapp-examples/spring-boot-mongodb/
+disconnect
+```
+Now, you'll just run the command :
+
+```bash
+cloudunit-cli> script --file /home/username/script.sh
+```
