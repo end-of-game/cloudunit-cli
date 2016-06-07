@@ -6,7 +6,7 @@ CloudUnit CLI is a command line client for [CloudUnit platform 1.0](https://gith
 
 ## Getting started
 
-Refer to our [guide](https://github.com/Treeptik/CloudUnit-CLI/blob/dev/documentation/GETTING-STARTED.md) to start using CloudUnit CLI from a delivery on Linux/MAC or Windows.
+Refer to our [guide](https://github.com/Treeptik/cloudunit-cli/blob/dev/documentation/GETTING_STARTED.md) to start using CloudUnit CLI from a delivery on Linux/MAC or Windows.
 
 ## Requirements for Dev mode
 
