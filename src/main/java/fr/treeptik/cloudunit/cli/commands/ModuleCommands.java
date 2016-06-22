@@ -29,8 +29,15 @@ public class ModuleCommands implements CommandMarker {
 
     @CliCommand(value = "add-module", help = "Add a new module to the current application")
     public String addModule(
-            @CliOption(key = {"name"}, mandatory = true, help = "Module type \n MYSQL 5.5 : -name mysql-5-5 " +
+            @CliOption(key = {"name"}, mandatory = true, help = "Module type " +
+                    "\n MYSQL 5.5 : -name mysql-5-5 " +
+                    "\n MYSQL 5.6 : -name mysql-5-6 " +
+                    "\n MYSQL 5.7 : -name mysql-5-7 " +
                     "\n POSTGRES 9.3 : -name postgres-9-3 " +
+                    "\n POSTGRES 9.4 : -name postgres-9-4 " +
+                    "\n POSTGRES 9.5 : -name postgres-9-5 " +
+                    "\n POSTGRES 9.5 : -name postgres-9-5 " +
+                    "\n POSTGRES 9.5 : -name postgres-9-5 " +
                     "\n REDIS 3.0 : -name redis-3-0 " +
                     "\nMongo 2.6 : -name mongo-2-6") String moduleName) {
 
