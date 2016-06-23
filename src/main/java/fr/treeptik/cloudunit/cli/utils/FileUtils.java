@@ -270,11 +270,12 @@ public class FileUtils {
         currentPath = currentPath.replace("/", "__");
         if (currentPath.startsWith("____")) currentPath = currentPath.substring(2);
         String command =  authentificationUtils.finalHost
+                + "/file/unzip/container/"+ currentContainer
                 + "/application/"+ applicationUtils.getApplication().getName()
-                + "/unzip/container/"+ currentContainer
                 + "/path/" + currentPath
                 + "/fileName/" + fileName;
         Map<String, String> parameters = new HashMap<>();
+        parameters.put("applicationName", applicationUtils.getApplication().getName());
         try {
             restUtils.sendPutCommand(command,
                     authentificationUtils.getMap(), parameters).get("body");
