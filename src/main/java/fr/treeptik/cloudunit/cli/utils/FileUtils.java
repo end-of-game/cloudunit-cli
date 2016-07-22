@@ -19,6 +19,7 @@ import fr.treeptik.cloudunit.cli.commands.ShellStatusCommand;
 import fr.treeptik.cloudunit.cli.exception.ManagerResponseException;
 import fr.treeptik.cloudunit.cli.model.Application;
 import fr.treeptik.cloudunit.cli.model.FileUnit;
+import fr.treeptik.cloudunit.cli.model.Module;
 import fr.treeptik.cloudunit.cli.model.Server;
 import fr.treeptik.cloudunit.cli.processor.InjectLogger;
 import fr.treeptik.cloudunit.cli.rest.JsonConverter;
@@ -92,9 +93,15 @@ public class FileUtils {
         List<Server> servers = application.getServers();
 
         for (Server server : servers) {
-
             if (server.getName().equalsIgnoreCase(containerName)) {
                 currentContainer = server.getContainerID();
+                break;
+            }
+        }
+
+        for (Module module : application.getModules()) {
+            if (module.getName().equalsIgnoreCase(containerName)) {
+                currentContainer = module.getContainerID();
                 break;
             }
         }
@@ -404,6 +411,9 @@ public class FileUtils {
         StringBuilder builder = new StringBuilder();
         for (Server server : applicationUtils.getApplication().getServers()) {
             builder.append("\t" + server.getName() + "\t");
+        }
+        for (Module module : applicationUtils.getApplication().getModules()) {
+            builder.append("\t" + module.getName() + "\t");
         }
         log.log(Level.INFO, builder.toString());
     }
