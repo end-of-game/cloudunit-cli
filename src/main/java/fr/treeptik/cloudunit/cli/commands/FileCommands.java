@@ -28,6 +28,8 @@ import javax.swing.text.MaskFormatter;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class FileCommands implements CommandMarker {
@@ -63,16 +65,38 @@ public class FileCommands implements CommandMarker {
 		return fileUtils.listFiles();
 	}
 
+	@CliCommand(value = "check-path", help = "Check if path exists")
+	public String checkPath(@CliOption(key = { "", "path" }) String path) throws ManagerResponseException{
+		return fileUtils.checkPath(path);
+	}
+
 	@CliCommand(value = "enter-directory", help = "Enter into a directory")
 	public String enterDirectory(
 			@CliOption(key = { "", "directoryName" }) String directoryName,
 			@CliOption(key = { "parent" }, mandatory = false, help = "Return at the parent directory", specifiedDefaultValue = "true", unspecifiedDefaultValue = "false") Boolean parent)
             throws ManagerResponseException {
-		if (directoryName != null && directoryName.equalsIgnoreCase("..")) {
-			parent = true;
-			directoryName = null;
+		String[] pathArray = directoryName.split("/");
+		List<String> pathList = new ArrayList<String>();
+		for(String s : pathArray) {
+			if(s != null && s.length() > 0) {
+				pathList.add(s);
+			}
 		}
-		return fileUtils.enterDirectory(directoryName, parent);
+		if(pathList.size() > 1)
+		{
+			String exists = checkPath(directoryName);
+			if(exists.equals("This directory exist")) {
+				return fileUtils.enterPathDirectory(pathList);
+			}
+			return exists;
+		}
+		else {
+			if (directoryName != null && directoryName.equalsIgnoreCase("..")) {
+				parent = true;
+				directoryName = null;
+			}
+			return fileUtils.enterDirectory(directoryName, parent);
+		}
 	}
 
 	@CliCommand(value = "upload-file", help = "Upload a file into the current directory")
@@ -80,7 +104,7 @@ public class FileCommands implements CommandMarker {
 			@CliOption(key = { "path" }, mandatory = true, help = "Path of the file") File path)
 			throws URISyntaxException, MalformedURLException, ManagerResponseException {
 
-		if (path.exists() == true && path.isFile() == true) {
+		if (path.exists() && path.isFile()) {
 			return fileUtils.uploadFile(path);
 		}
 		return "Check your syntax and option chosen and it's the right path";
