@@ -258,9 +258,11 @@ public class FileUtils {
             return null;
         }
 
-        json = restUtils.sendGetCommand(
-                authentificationUtils.finalHost + "/file/container/"
-                        + currentContainer + "/path/" + currentPath,
+        currentPath = currentPath.replace("/", "__");
+        String command =  authentificationUtils.finalHost + "/file/container/"
+                + currentContainer + "/path/" + currentPath;
+
+        json = restUtils.sendGetCommand(command,
                 authentificationUtils.getMap()).get("body");
 
         List<FileUnit> fileUnits = JsonConverter.getFileUnits(json);
