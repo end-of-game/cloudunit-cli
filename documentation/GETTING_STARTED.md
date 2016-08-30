@@ -208,6 +208,49 @@ Your application myapp is currently being stopped
 
 ## Features on an application
 
+### Environment variables
+
+#### Add
+
+You can create an environment variable to an application with this command :
+
+```bash
+cloudunit-DEV-test>  create-var-env --key key --value value
+test
+An environment variable has been successfully added to test
+```
+
+Accents and specials characters are forbbiden in keys.
+
+#### Remove
+
+You can remove an environment variable if you use the command *rm-var-env* :
+```bash
+cloudunit-DEV-test>  rm-var-env --key key
+This environment variable has successful been deleted
+```
+
+#### Listing
+
+You can list all environment variables of an application : 
+```bash
+cloudunit-DEV-test>  list-var-env 
++-----------------------------+------+
+|CURRENT ENVIRONMENT VARIABLES|VALUES|
++-----------------------------+------+
+|key                          |value |
++-----------------------------+------+
+1 variables found!
+```
+
+#### Update
+
+You can update a environment variable by modifying key, value or both.
+```bash
+cloudunit-DEV-test>  update-var-env --old-key key --new-key keyUpdated --value valueUpdated
+This environment variable has successful been updated
+```
+
 ### Aliases
 
 #### Add
