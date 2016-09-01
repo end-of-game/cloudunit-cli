@@ -425,6 +425,40 @@ War deployed - Access on http://myapp-johndoe-admin.cloudunit.dev
 
 ## Globales features
 
+### Volume management
+
+#### Create a volume
+
+You can create a volume with this command :
+```bash
+cloudunit-DEV>  create-volume --name volumeTest
+The volume volumeTest was been successfully created
+```
+
+#### Remove a volume
+
+You can remove a volume :
+```bash
+cloudunit-DEV>  rm-volume --name volumeTest
+This volume has successful been deleted
+```
+
+#### Mount a volume on a application
+
+When you have created your volume, you can mount it on an existant application (**You must use an absolute path for this command**) : 
+```bash
+cloudunit-DEV-test>  mount-volume --volume-name volumeTest --path /cloudunit/ --container-name dev-johndoe-test-tomcat-6 --application-name test
+This volume has successful been mounted
+```
+
+#### Unmount a volume on a application
+
+Once your volume mount on your application, you can unmount it with the command :
+```bash
+cloudunit-DEV-test>  unmount-volume --container-name dev-johndoe-test-tomcat-6 --volume-name volumeTest
+This volume has successful been unmounted
+```
+
 ### Clear the console
 
 You can clear the console by two ways :
