@@ -165,9 +165,9 @@ No modules found!
 Terminated
 ```
 
-### Listing
+### Listing applications
 
-You can list all applications of the server :
+You can list all applications :
 ```bash
 cloudunit-DEV>  list-apps
 +----------------+--------+----------------+-----------+------+
@@ -207,6 +207,19 @@ Your application myapp is currently being stopped
 ```
 
 ## Features on an application
+
+### Listing containers
+
+You can list all containers of an application :
+```bash
+cloudunit-DEV-test>  list-containers 
++-------------------------+
+|CONTAINER NAME           |
++-------------------------+
+|dev-johndoe-test-tomcat-6|
++-------------------------+
+1 containers found!
+```
 
 ### Environment variables
 
